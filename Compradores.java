@@ -1,0 +1,11 @@
+
+/**
+ * Escreva a descrição da classe Compradores aqui.
+ * 
+ * @author (seu nome) 
+ * @version (número de versão ou data)
+ */
+public class Compradores extends Actores
+{
+    
+}
