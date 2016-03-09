@@ -108,8 +108,13 @@ public class Apartamento extends Imóveis
     
     public String toString(){
         StringBuilder s = new StringBuilder();
-        s.append("Tipo: " + tipo + "Área Total: " + areaTotal + "Nº de quartos: " + quartos + "Nº de WCs: " + wc +
-        "Nº da porta: " + porta + "Nº do andar: " + andar + "Tem garagem: " + temGaragem);
+        s.append("Tipo: " + tipo);
+        s.append("Área Total: " + areaTotal);
+        s.append("Nº de quartos: " + quartos);
+        s.append("Nº de WCs: " + wc);
+        s.append("Nº da porta: " + porta);
+        s.append("Nº do andar: " + andar);
+        s.append("Tem garagem: " + temGaragem);
         return s.toString();
     }
    
