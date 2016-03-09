@@ -93,6 +93,7 @@ public class Actores extends Imoobiliaria
         s.append("Morada: " + morada);
         s.append("Data de Nascimento: " + dataNascimento);
         return s.toString();
+        
     }
     
 }
