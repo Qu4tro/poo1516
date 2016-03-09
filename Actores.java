@@ -87,8 +87,11 @@ public class Actores extends Imoobiliaria
     
     public String toString(){
         StringBuilder s = new StringBuilder();
-        s.append("Email: \n" + email + "Nome: \n" + nome + "Password: \n" + password + 
-        "Morada: \n" + morada + "Data de Nascimento: " + dataNascimento);
+        s.append("Email: " + email);
+        s.append(Nome: " + nome)
+        s.append("Password: " + password);
+        s.append("Morada: " + morada);
+        s.append("Data de Nascimento: " + dataNascimento);
         return s.toString();
     }
     
