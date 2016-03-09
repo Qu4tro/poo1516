@@ -5,7 +5,7 @@
  * @author (seu nome) 
  * @version (número de versão ou data)
  */
-public class Apartamento extends Imóveis
+public class Apartamento extends Imovel
 {
     private String tipo;
     private double areaTotal;

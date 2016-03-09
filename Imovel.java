@@ -1,29 +1,29 @@
 
 /**
- * Escreva a descrição da classe Imóveis aqui.
+ * Escreva a descrição da classe Imovel aqui.
  * 
  * @author (seu nome) 
  * @version (número de versão ou data)
  */
-public class Imóveis extends Imoobiliaria
+public class Imovel extends Imoobiliaria
 {
     private String rua;
     private double precoPedido;
     private double precoMinimo;
     
-    public Imóveis(){
+    public Imovel(){
         rua = "";
         precoPedido = 0.0;
         precoMinimo = 0.0;
     }
     
-    public Imóveis(String rua, double precoP, double precoM){
+    public Imovel(String rua, double precoP, double precoM){
         this.rua = rua;
         this.precoPedido = precoP;
         this.precoMinimo = precoM;
     }
     
-    public Imóveis(Imóveis i){
+    public Imovel(Imovel i){
         rua = i.getRua();
         precoPedido = i.getPrecoPedido();
         precoMinimo = i.getPrecoMinimo();
@@ -49,18 +49,18 @@ public class Imóveis extends Imoobiliaria
         this.precoMinimo = precoM;
     }
     
-    public Imóveis clone(){
-        return new Imóveis(this);
+    public Imovel clone(){
+        return new Imovel(this);
     }
     
-    public boolean Imóveis(Object o){
+    public boolean Imovel(Object o){
         if(o == this){
             return true;
         }
         if(o == null || o.getClass() != this.getClass()){
             return false;
         }
-        Imóveis im = (Imóveis) o;
+        Imovel im = (Imovel) o;
         return im.getRua() == rua && im.getPrecoPedido() == precoPedido && 
         im.getPrecoMinimo() == precoMinimo;
     }
