@@ -22,8 +22,41 @@ public class Imoobiliaria{
 
    		} 
 
-   		else System.out.println("O utilizador já existe no sistema");
+   		else{
+          throw new UtilizadorExistenteException();
+      }
    		
    		
    }
+
+
+   public void iniciaSessao ( String email , String password ){
+        for(String actor : users){
+          if (email == actor.getEmail()){
+            if(password == actor.getPassword()){
+                // inicia a sessão;  
+            } else {
+                // password errada
+            }
+          }
+        }
+        throw new SemautorizacaoException();
+        // não há utilizador;
+   }
+   public void fechaSessao(){
+    // falta cenas
+   }
+
 }
+  
+  class UtilizadorExistenteException extends Exception{
+      public UtilizadorExistenteExcetpion(){
+          super();
+      }
+  }
+
+  class SemautorizacaoException extends Exception{
+      public SemautorizacaoException() {
+          super();
+      }
+  }
