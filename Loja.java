@@ -5,7 +5,7 @@
  * @author (seu nome) 
  * @version (número de versão ou data)
  */
-public class Loja extends Imóveis
+public class Loja extends Imovel
 {
     private double area;
     private boolean temWC;

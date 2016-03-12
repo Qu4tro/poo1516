@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * @version (número de versão ou data)
  */
 public class Compradores extends Actores{
+	
 	private ArrayList<String> favoritos;
 
 	public Compradores(){
