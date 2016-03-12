@@ -7,19 +7,18 @@ import java.util.ArrayList;
  */
 public class Imoobiliaria{
 
-	private ArrayList<Actor> lista;
+	private ArrayList<Actor> users;
 
-	public boolean verificautilizador(Actor utilizador){
-		for (int i = 0; i < lista.size(); i++){
-			if (utilizador == lista.get(i)) return true;
-
-		}
-		return false;
+	public boolean verificaUtilizador(Actor user){
+		if (user == null) {
+            return false;
+        }
+        return users.contains(user);
 	}
    
-   public void registarUtilizador(Actor utilizador){
-   		if (verificautilizador(utilizador)){
-   			lista.add(utilizador);
+   public void registarUtilizador(Actor user){
+   		if (verificaUtilizador(user)){
+   			users.add(user);
 
    		} 
 
