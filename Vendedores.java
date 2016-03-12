@@ -5,7 +5,7 @@
  * @author (seu nome) 
  * @version (número de versão ou data)
  */
-public class Vendedores extends Actores
+public class Vendedores extends Actor
 {
    
 }

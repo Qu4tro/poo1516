@@ -1,4 +1,4 @@
-import java.util.ArrayList
+import java.util.ArrayList;
 /**
  * \\ TODO: Receber 
  * 
@@ -7,17 +7,17 @@ import java.util.ArrayList
  */
 public class Imoobiliaria{
 
-	private ArrayList<Actores> lista;
+	private ArrayList<Actor> lista;
 
-	public boolean verificautilizador(Actores utilizador){
+	public boolean verificautilizador(Actor utilizador){
 		for (int i = 0; i < lista.size(); i++){
-			if (utilizador == lista.get(i)) return True;
+			if (utilizador == lista.get(i)) return true;
 
 		}
-		return False;
+		return false;
 	}
    
-   public void registarUtilizador(Actores utilizador){
+   public void registarUtilizador(Actor utilizador){
    		if (verificautilizador(utilizador)){
    			lista.add(utilizador);
 
