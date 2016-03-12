@@ -1,12 +1,11 @@
 
 /**
  * Escreva a descrição da classe Apartamento aqui.
- * 
- * @author (seu nome) 
+ *
+ * @author (seu nome)
  * @version (número de versão ou data)
  */
-public class Apartamento extends Imovel
-{
+public class Apartamento extends Imovel {
     private String tipo;
     private double areaTotal;
     private int quartos;
@@ -14,18 +13,18 @@ public class Apartamento extends Imovel
     private int porta;
     private int andar;
     private boolean temGaragem;
-   
-    public Apartamento(){
-       tipo = "";
-       areaTotal = 0.0;
-       quartos = 0;
-       wc = 0;
-       porta = 0;
-       andar = 0;
-       temGaragem = false;
+
+    public Apartamento() {
+        tipo = "";
+        areaTotal = 0.0;
+        quartos = 0;
+        wc = 0;
+        porta = 0;
+        andar = 0;
+        temGaragem = false;
     }
-    
-    public Apartamento(String tipo, double areaT, int quar, int wc, int p, int and, boolean temGaragem){
+
+    public Apartamento(String tipo, double areaT, int quar, int wc, int p, int and, boolean temGaragem) {
         this.tipo = tipo;
         this.areaTotal = areaT;
         this.quartos = quar;
@@ -34,8 +33,8 @@ public class Apartamento extends Imovel
         this.andar = and;
         this.temGaragem = temGaragem;
     }
-    
-    public Apartamento(Apartamento ap){
+
+    public Apartamento(Apartamento ap) {
         tipo = ap.getTipo();
         areaTotal = ap.getAreaTotal();
         quartos = ap.getQuartos();
@@ -44,69 +43,81 @@ public class Apartamento extends Imovel
         andar = ap.getAndar();
         temGaragem = ap.getTemGaragem();
     }
-    
-    public String getTipo(){
+
+    public String getTipo() {
         return tipo;
     }
-    public double getAreaTotal(){
+
+    public double getAreaTotal() {
         return areaTotal;
     }
-    public int getQuartos(){
+
+    public int getQuartos() {
         return quartos;
     }
-    public int getWc(){
+
+    public int getWc() {
         return wc;
     }
-    public int getPorta(){
+
+    public int getPorta() {
         return porta;
     }
-    public int getAndar(){
+
+    public int getAndar() {
         return andar;
     }
-    public boolean getTemGaragem(){
+
+    public boolean getTemGaragem() {
         return temGaragem;
     }
-    
-    public void setTipo(String tipo){
+
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    public void setAreaTotal(double area){
+
+    public void setAreaTotal(double area) {
         this.areaTotal = area;
     }
-    public void setQuartos(int quartos){
+
+    public void setQuartos(int quartos) {
         this.quartos = quartos;
     }
-    public void setWc(int wc){
+
+    public void setWc(int wc) {
         this.wc = wc;
     }
-    public void setPorta(int porta){
+
+    public void setPorta(int porta) {
         this.porta = porta;
     }
-    public void setAndar(int andar){
-        this.andar = andar; 
+
+    public void setAndar(int andar) {
+        this.andar = andar;
     }
-    public void setTemGaragem(boolean temGaragem){
+
+    public void setTemGaragem(boolean temGaragem) {
         this.temGaragem = temGaragem;
     }
-    
-    public Apartamento clone(){
+
+    public Apartamento clone() {
         return new Apartamento(this);
     }
-    
-    public boolean Apartamento(Object o){
-        if(o == this){
+
+    public boolean Apartamento(Object o) {
+        if (o == this) {
             return true;
         }
-        if(o == null || o.getClass() != this.getClass()){
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
         Apartamento apart = (Apartamento) o;
         return apart.getTipo() == tipo && apart.getAreaTotal() == areaTotal && apart.getQuartos() == quartos
-        && apart.getWc() == wc && apart.getPorta() == porta && apart.getAndar() == andar && 
-        apart.getTemGaragem() == temGaragem;
+                && apart.getWc() == wc && apart.getPorta() == porta && apart.getAndar() == andar &&
+                apart.getTemGaragem() == temGaragem;
     }
-    
-    public String toString(){
+
+    public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("Tipo: " + tipo);
         s.append("Área Total: " + areaTotal);
@@ -117,5 +128,5 @@ public class Apartamento extends Imovel
         s.append("Tem garagem: " + temGaragem);
         return s.toString();
     }
-   
+
 }

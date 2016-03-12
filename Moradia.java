@@ -1,12 +1,11 @@
 
 /**
  * Escreva a descrição da classe Moradia aqui.
- * 
- * @author (seu nome) 
+ *
+ * @author (seu nome)
  * @version (número de versão ou data)
  */
-public class Moradia extends Imovel
-{
+public class Moradia extends Imovel {
     private String tipo;
     private double areaImplementacao;
     private double areaTotal;
@@ -14,8 +13,8 @@ public class Moradia extends Imovel
     private int quartos;
     private int wc;
     private int porta;
-    
-    public Moradia(){
+
+    public Moradia() {
         tipo = "";
         areaImplementacao = 0.0;
         areaTotal = 0.0;
@@ -24,8 +23,8 @@ public class Moradia extends Imovel
         wc = 0;
         porta = 0;
     }
-    
-    public Moradia(String tipo, double areaI, double areaTot, double areaTerr, int q, int wc, int por){
+
+    public Moradia(String tipo, double areaI, double areaTot, double areaTerr, int q, int wc, int por) {
         this.tipo = tipo;
         this.areaImplementacao = areaI;
         this.areaTotal = areaTot;
@@ -34,8 +33,8 @@ public class Moradia extends Imovel
         this.wc = wc;
         this.porta = por;
     }
-    
-    public Moradia(Moradia m){
+
+    public Moradia(Moradia m) {
         tipo = m.getTipo();
         areaImplementacao = m.getAreaImplementacao();
         areaTotal = m.getAreaTotal();
@@ -44,77 +43,87 @@ public class Moradia extends Imovel
         wc = m.getWc();
         porta = m.getPorta();
     }
-    
-    public String getTipo(){
+
+    public String getTipo() {
         return tipo;
     }
-    public double getAreaImplementacao(){
+
+    public double getAreaImplementacao() {
         return areaImplementacao;
     }
-    public double getAreaTotal(){
+
+    public double getAreaTotal() {
         return areaTotal;
     }
-    public double getAreaTerreno(){
+
+    public double getAreaTerreno() {
         return areaTerreno;
     }
-    public int getQuartos(){
+
+    public int getQuartos() {
         return quartos;
     }
-    public int getWc(){
+
+    public int getWc() {
         return wc;
     }
-    public int getPorta(){
+
+    public int getPorta() {
         return porta;
     }
-    
-    public void setTipo(String tipo){
+
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    public void setAreaImplementacao(double areaI){
+
+    public void setAreaImplementacao(double areaI) {
         this.areaImplementacao = areaI;
     }
-    public void setAreaTotal(double areaTotal){
+
+    public void setAreaTotal(double areaTotal) {
         this.areaTotal = areaTotal;
     }
-    public void setAreaTerreno(double areaTerreno){
+
+    public void setAreaTerreno(double areaTerreno) {
         this.areaTerreno = areaTerreno;
     }
-    public void setQuartos(int quartos){
+
+    public void setQuartos(int quartos) {
         this.quartos = quartos;
     }
-    public void setWc(int wc){
-        this.wc  = wc;
+
+    public void setWc(int wc) {
+        this.wc = wc;
     }
-    public void setPortas(int porta){
+
+    public void setPortas(int porta) {
         this.porta = porta;
     }
-    
-    public Moradia clone(){
+
+    public Moradia clone() {
         return new Moradia(this);
     }
-    
-    public boolean Moradia(Object o){
-        if(o == this){
+
+    public boolean Moradia(Object o) {
+        if (o == this) {
             return true;
         }
-        if(o == null || o.getClass() != this.getClass()){
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
         Moradia mor = (Moradia) o;
         return mor.getTipo() == tipo && mor.getAreaImplementacao() == areaImplementacao
-        && mor.getAreaTotal() == areaTotal && mor.getAreaTerreno() == areaTerreno && mor.getQuartos() == quartos
-        && mor.getWc() == wc && mor.getPorta() == porta;
+                && mor.getAreaTotal() == areaTotal && mor.getAreaTerreno() == areaTerreno && mor.getQuartos() == quartos
+                && mor.getWc() == wc && mor.getPorta() == porta;
     }
-    
-    public String toString(){
+
+    public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("Tipo: " + tipo + "Área de Implementação: " + areaImplementacao + "Área total coberta: " + 
-        areaTotal + "Área terreno envolvente: " + areaTerreno + "Nº de quartos: " + quartos + "Nº de WCs: " + wc
-        + "Nº da porta: " + porta);
+        s.append("Tipo: " + tipo + "Área de Implementação: " + areaImplementacao + "Área total coberta: " +
+                areaTotal + "Área terreno envolvente: " + areaTerreno + "Nº de quartos: " + quartos + "Nº de WCs: " + wc
+                + "Nº da porta: " + porta);
         return s.toString();
     }
-    
-    
-    
-    
+
+
 }
