@@ -23,7 +23,7 @@ public class Compradores extends Actores{
 		favoritos = comprador.getFav();
 	}
 
-	public ArrayList<> getFav(){
+	public ArrayList<String> getFav(){
 		return favoritos;
 	}
 
@@ -35,8 +35,8 @@ public class Compradores extends Actores{
 
 	}
 
-	public void addFav(Imvel a){
-		if (a != NULL){
+	public void addFav(String a){
+		if (a != null){
 			favoritos.add(a);
 		}
 	}
@@ -45,11 +45,11 @@ public class Compradores extends Actores{
 		return new Compradores(this);
 	}
 
-	public boolean Compradores(Object o){
+/*	public boolean Compradores(Object o){
 		if(o == this){
 			return true;
 		}
 
-	}
+	}*/
 }   
 
