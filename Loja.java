@@ -68,7 +68,7 @@ public class Loja extends Imovel {
         return new Loja(this);
     }
 
-    public boolean Loja(Object o) {
+    public boolean equals(Object o) {
         if (o == this) {
             return true;
         }
@@ -77,13 +77,20 @@ public class Loja extends Imovel {
         }
         Loja lj = (Loja) o;
         return lj.getArea() == area && lj.getTemWC() == temWC &&
-                lj.getTipoNegocio() == tipoNegocio && lj.getPorta() == porta;
+                lj.getTipoNegocio().equals(tipoNegocio) && lj.getPorta() == porta;
     }
 
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("Área: " + area + "Tem WC: " + temWC + "Tipo de negócio viável na loja: " +
-                tipoNegocio + "Nº de porta: " + porta);
+        StringBuilder s;
+        s = new StringBuilder();
+        s.append("Área: ");
+        s.append(area);
+        s.append("Tem WC: ");
+        s.append(temWC);
+        s.append("Tipo de negócio viável na loja: ");
+        s.append(tipoNegocio);
+        s.append("Nº de porta:");
+        s.append(porta);
         return s.toString();
     }
 

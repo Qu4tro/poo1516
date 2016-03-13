@@ -82,17 +82,24 @@ public class Utilizador {
             return false;
         }
         Utilizador ac = (Utilizador) o;
-        return ac.getEmail() == email && ac.getNome() == nome && ac.getPassword() == password
-                && ac.getMorada() == morada && ac.getDataNascimento() == dataNascimento;
+        return ac.getEmail().equals(email) && ac.getNome().equals(nome) &&
+                ac.getPassword().equals(password) && ac.getMorada().equals(morada) &&
+                ac.getDataNascimento().equals(dataNascimento);
     }
 
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("Email: " + email);
-        s.append("Nome: " + nome);
-        s.append("Password: " + password);
-        s.append("Morada: " + morada);
-        s.append("Data de Nascimento: " + dataNascimento);
+        StringBuilder s;
+        s = new StringBuilder();
+        s.append("Email: ");
+        s.append(email);
+        s.append("Nome: ");
+        s.append(nome);
+        s.append("Password: ");
+        s.append(password);
+        s.append("Morada: ");
+        s.append(morada);
+        s.append("Data de Nascimento: ");
+        s.append(dataNascimento);
         return s.toString();
 
     }

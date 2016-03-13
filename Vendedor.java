@@ -16,10 +16,11 @@ public class Vendedor extends Utilizador {
         imoveisVendidos = new ArrayList<>();
     }
 
-    public Vendedor(Vendedor vendedor) {
+    public Vendedor(Utilizador vendedor) {
         this(vendedor.getEmail(), vendedor.getNome(),
                 vendedor.getPassword(), vendedor.getMorada(), vendedor.getDataNascimento());
     }
+
 
     public ArrayList<String> getImoveisEmVenda() {
         return imoveisEmVenda;

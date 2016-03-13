@@ -1,10 +1,4 @@
 
-/**
- * Escreva a descrição da classe Apartamento aqui.
- *
- * @author (seu nome)
- * @version (número de versão ou data)
- */
 public class Apartamento extends Imovel {
     private String tipo;
     private double areaTotal;
@@ -112,20 +106,29 @@ public class Apartamento extends Imovel {
             return false;
         }
         Apartamento apart = (Apartamento) o;
-        return apart.getTipo() == tipo && apart.getAreaTotal() == areaTotal && apart.getQuartos() == quartos
+        return apart.getTipo().equals(tipo) && apart.getAreaTotal() == areaTotal && apart.getQuartos() == quartos
                 && apart.getWc() == wc && apart.getPorta() == porta && apart.getAndar() == andar &&
                 apart.getTemGaragem() == temGaragem;
     }
 
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("Tipo: " + tipo);
-        s.append("Área Total: " + areaTotal);
-        s.append("Nº de quartos: " + quartos);
-        s.append("Nº de WCs: " + wc);
-        s.append("Nº da porta: " + porta);
-        s.append("Nº do andar: " + andar);
-        s.append("Tem garagem: " + temGaragem);
+        StringBuilder s;
+        s = new StringBuilder();
+
+        s.append("Tipo: ");
+        s.append(tipo);
+        s.append("Área Total: ");
+        s.append(areaTotal);
+        s.append("Nº de quartos: ");
+        s.append(quartos);
+        s.append("Nº de WCs: ");
+        s.append(wc);
+        s.append("Nº da porta: ");
+        s.append(porta);
+        s.append("Nº do andar: ");
+        s.append(andar);
+        s.append("Tem garagem: ");
+        s.append(temGaragem);
         return s.toString();
     }
 

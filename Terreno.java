@@ -75,11 +75,17 @@ public class Terreno extends Imovel {
 
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("Area: " + area);
-        s.append("O diametro das canalizações é: " + diamCanalizacoes);
-        s.append("Os kwhz maximos são: " + kWh);
-        s.append("Tem acesso?: " + temAcesso);
+        s.append("Area: ");
+        s.append(area);
+        s.append("\nO diametro das canalizações é: ");
+        s.append(diamCanalizacoes);
+        s.append("\nOs kwhz maximos são: ");
+        s.append(kWh);
+        s.append("\nTem acesso?: ");
+        s.append(temAcesso);
 
         return s.toString();
     }
+
+
 }

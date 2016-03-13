@@ -64,13 +64,20 @@ public class Imovel extends Imoobiliaria {
             return false;
         }
         Imovel im = (Imovel) o;
-        return im.getRua() == rua && im.getPrecoPedido() == precoPedido &&
+        return im.getRua().equals(rua) && im.getPrecoPedido() == precoPedido &&
                 im.getPrecoMinimo() == precoMinimo;
     }
 
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("Rua: " + rua + "Preço Pedido: " + precoPedido + "PrecoMinimo: " + precoMinimo);
+        StringBuilder s;
+
+        s = new StringBuilder();
+        s.append("Rua: ");
+        s.append(rua);
+        s.append("\nPreço Pedido: ");
+        s.append(precoPedido);
+        s.append("\nPreço Minimo: ");
+        s.append(precoMinimo);
         return s.toString();
     }
 

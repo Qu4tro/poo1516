@@ -104,7 +104,7 @@ public class Moradia extends Imovel {
         return new Moradia(this);
     }
 
-    public boolean Moradia(Object o) {
+    public boolean equals(Object o) {
         if (o == this) {
             return true;
         }
@@ -112,16 +112,29 @@ public class Moradia extends Imovel {
             return false;
         }
         Moradia mor = (Moradia) o;
-        return mor.getTipo() == tipo && mor.getAreaImplementacao() == areaImplementacao
+        return mor.getTipo().equals(tipo) && mor.getAreaImplementacao() == areaImplementacao
                 && mor.getAreaTotal() == areaTotal && mor.getAreaTerreno() == areaTerreno && mor.getQuartos() == quartos
                 && mor.getWc() == wc && mor.getPorta() == porta;
     }
 
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("Tipo: " + tipo + "Área de Implementação: " + areaImplementacao + "Área total coberta: " +
-                areaTotal + "Área terreno envolvente: " + areaTerreno + "Nº de quartos: " + quartos + "Nº de WCs: " + wc
-                + "Nº da porta: " + porta);
+        StringBuilder s;
+        s = new StringBuilder();
+
+        s.append("Tipo: ");
+        s.append(tipo);
+        s.append("Área de Implementação: ");
+        s.append(areaImplementacao);
+        s.append("Área total coberta: ");
+        s.append(areaTotal);
+        s.append("Área terreno envolvente: ");
+        s.append(areaTerreno);
+        s.append("Nº de quartos: ");
+        s.append(quartos);
+        s.append("Nº de WCs: ");
+        s.append(wc);
+        s.append("Nº da porta: ");
+        s.append(porta);
         return s.toString();
     }
 
