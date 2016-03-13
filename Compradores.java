@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author (seu nome)
  * @version (número de versão ou data)
  */
-public class Compradores extends Actor {
+public class Compradores extends Utilizador {
 
     private ArrayList<String> favoritos;
 

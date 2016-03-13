@@ -1,18 +1,18 @@
 
 /**
- * Escreva a descrição da classe Actor aqui.
+ * Escreva a descrição da classe Utilizador aqui.
  *
  * @author (seu nome)
  * @version (número de versão ou data)
  */
-public class Actor extends Imoobiliaria {
+public class Utilizador {
     private String email;
     private String nome;
     private String password;
     private String morada;
     private String dataNascimento;
 
-    public Actor() {
+    public Utilizador() {
         email = "";
         nome = "";
         password = "";
@@ -20,7 +20,7 @@ public class Actor extends Imoobiliaria {
         dataNascimento = "";
     }
 
-    public Actor(String email, String nom, String pass, String mor, String dataN) {
+    public Utilizador(String email, String nom, String pass, String mor, String dataN) {
         this.email = email;
         this.nome = nom;
         this.password = pass;
@@ -28,7 +28,7 @@ public class Actor extends Imoobiliaria {
         this.dataNascimento = dataN;
     }
 
-    public Actor(Actor a) {
+    public Utilizador(Utilizador a) {
         email = a.getEmail();
         nome = a.getNome();
         password = a.getPassword();
@@ -76,18 +76,18 @@ public class Actor extends Imoobiliaria {
         this.dataNascimento = data;
     }
 
-    public Actor clone() {
-        return new Actor(this);
+    public Utilizador clone() {
+        return new Utilizador(this);
     }
 
-    public boolean Actores(Object o) {
+    public boolean equals(Object o) {
         if (o == this) {
             return true;
         }
         if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
-        Actor ac = (Actor) o;
+        Utilizador ac = (Utilizador) o;
         return ac.getEmail() == email && ac.getNome() == nome && ac.getPassword() == password
                 && ac.getMorada() == morada && ac.getDataNascimento() == dataNascimento;
     }
