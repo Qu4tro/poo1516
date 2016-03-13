@@ -1,5 +1,10 @@
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Map;
 import java.util.Scanner;
+
 
 public class Imoobiliaria {
 
@@ -42,7 +47,9 @@ public class Imoobiliaria {
             System.exit(0);
         } else if (cmd.equals("login")) {
             imobiliaria.loggedUser = loginUI(parameters);
-
+        } else if (cmd.equals("logout")) {
+            imobiliaria.fechaSessao();
+            System.out.println("Sessão terminada.");
         } else if (cmd.equals("registar")) {
             try {
                 imobiliaria.registarUtilizador(registarUI(parameters));
@@ -60,11 +67,11 @@ public class Imoobiliaria {
         }
     }
 
-    public static Utilizador registarUI(String[] params) {
+    public static Utilizador loginUI(String[] params) {
         return null;
     }
 
-    public static Utilizador loginUI(String[] params) {
+    public static Utilizador registarUI(String[] params) {
         return null;
     }
 
@@ -83,13 +90,35 @@ public class Imoobiliaria {
         loggedUser = null;
     }
 
-    public boolean verificaUtilizador(Utilizador user) {
-        if (user == null) {
-            return false;
+    public void iniciaSessao(String email, String password) throws SemAutorizacaoException {
+        // TODO: Há 3 razões pela qual esta função deve falhar:
+        //      O utilizador não existe;
+        //      Password errada;
+        //      Utilizador já autenticado
+        // E mesmo assim porquê é que só mandamos 1 erro?
+        if (loggedUser == null) {
+            for (Utilizador utilizador : users) {
+                if (email.equals(utilizador.getEmail())) {
+                    if (password.equals(utilizador.getPassword())) {
+                        loggedUser = utilizador;
+                    } else {
+                        // password errada
+                        throw new SemAutorizacaoException();
+                    }
+                }
+            }
+            // Não há utilizador registado na aplicação;
+        } else {
+
+            // Utilizador já autenticado
         }
-        // TODO: Aqui provavelmente é melhor simplesmente verificar se existe algum user com email igual.
-        return users.contains(user);
+
     }
+
+    public void fechaSessao() {
+        loggedUser = null;
+    }
+
 
     public void registarUtilizador(Utilizador user) throws UtilizadorExistenteException {
         if (verificaUtilizador(user)) {
@@ -102,23 +131,56 @@ public class Imoobiliaria {
 
     }
 
-    public void iniciaSessao(String email, String password) throws SemAutorizacaoException {
-        for (Utilizador utilizador : users) {
-            if (email == utilizador.getEmail()) {
-                if (password == utilizador.getPassword()) {
-                    // inicia a sessão;
-                } else {
-                    // password errada
-                }
-            }
+    public boolean verificaUtilizador(Utilizador user) {
+        if (user == null) {
+            return false;
         }
-        throw new SemAutorizacaoException();
-        // não há utilizador;
+        // TODO: Aqui provavelmente é melhor simplesmente verificar se existe algum user com email igual.
+        return users.contains(user);
     }
 
-    public void fechaSessao() {
-        // falta cenas
+    public void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException {
+        if (im != null) {
+            imoveis.add(im);
+        }
     }
+
+    public List<Consulta> getConsultas() throws SemAutorizacaoException {
+        return null;
+    }
+
+    public void setEstado(String idImovel, String estado)
+            throws ImovelInexistenteException,
+            SemAutorizacaoException,
+            EstadoInvalidoException {
+
+    }
+
+
+    public Set<String> getTopImoveis(int n) {
+        return null;
+    }
+
+    public List<Imovel> getImovel(String classe, int preco) {
+        return null;
+    }
+
+
+    public List<Habitavel> getHabitaveis(int preco) {
+        return null;
+    }
+
+    public Map<Imovel, Vendedor> getMapeamentoImoveis() {
+        return null;
+    }
+
+    public void setFavorito(String idImovel) throws ImovelInexistenteException, SemAutorizacaoException {
+    }
+
+    public TreeSet<Imovel> getFavoritos() throws SemAutorizacaoException {
+        return null;
+    }
+
 
 }
 
@@ -130,6 +192,24 @@ class UtilizadorExistenteException extends Exception {
 
 class SemAutorizacaoException extends Exception {
     public SemAutorizacaoException() {
+        super();
+    }
+}
+
+class ImovelInexistenteException extends Exception {
+    public ImovelInexistenteException() {
+        super();
+    }
+}
+
+class EstadoInvalidoException extends Exception {
+    public EstadoInvalidoException() {
+        super();
+    }
+}
+
+class ImovelExisteException extends Exception {
+    public ImovelExisteException() {
         super();
     }
 }
