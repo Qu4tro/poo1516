@@ -1,10 +1,4 @@
 
-/**
- * Escreva a descrição da classe Utilizador aqui.
- *
- * @author (seu nome)
- * @version (número de versão ou data)
- */
 public class Utilizador {
     private String email;
     private String nome;

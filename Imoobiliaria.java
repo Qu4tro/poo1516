@@ -149,8 +149,7 @@ public class Imoobiliaria {
         return null;
     }
 
-    public void setEstado(String idImovel, String estado)
-            throws ImovelInexistenteException,
+    public void setEstado(String idImovel, String estado) throws ImovelInexistenteException,
             SemAutorizacaoException,
             EstadoInvalidoException {
 
