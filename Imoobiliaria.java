@@ -11,11 +11,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map;
-import java.util.Scanner;
 import java.lang.String;
-import java.util.Collections;
-import java.util.Iterator;
-
 
 
 public class Imoobiliaria {
@@ -27,64 +23,75 @@ public class Imoobiliaria {
 
 
     // Métodos estáticos
-
     public static void main(String[] args) {
 
         Imoobiliaria imobiliaria = new Imoobiliaria();
 
-        Scanner scan = new Scanner(System.in);
-        String line;
+        initial_menu(imobiliaria);
+    }
 
-        while (scan.hasNextLine()) {
-            System.out.println("> ");
-            line = scan.nextLine().trim(); // remove leading spaces and check for empty
+    public static void initial_menu(Imoobiliaria imobiliaria) {
 
-            if (line.isEmpty()) {
-                continue;
-            }
+        Menu m = new Menu();
+        List<String> params;
 
-            run_commands(imobiliaria, line);
+        int choice;
+
+        m.addField("Autenticar");
+        m.addField("Registar");
+        m.addField("Continuar sem autenticação");
+
+        choice = m.presentChoices();
+
+        switch (choice) {
+            case 1:
+                params = loginUI();
+                try {
+                    imobiliaria.iniciaSessao(params.get(0), params.get(1));
+                } catch (SemAutorizacaoException e) {
+                    //TODO - se ele tentar inicar sessão e falhar
+                }
+                break;
+
+            case 2:
+                params = registarUI();
+                try {
+                    params = registarUI();
+                    // criar Utilizador aqui com os params recebidos
+                    imobiliaria.registarUtilizador(null);
+                } catch (UtilizadorExistenteException e) {
+                    //TODO - se ele tentar registar e falhar
+                }
+                break;
+
+            case 3:
+                ;
+                break;
+
         }
     }
 
-    public static void run_commands(Imoobiliaria imobiliaria, String line) {
 
-        String[] parameters;
-        String cmd;
+    public static List<String> loginUI() {
+        Menu menu = new Menu();
+        menu.addField("Email");
+        menu.addField("Password");
 
-        parameters = line.split("\\s+");
-        cmd = parameters[0];
-
-        if (cmd.equals("quit") || cmd.equals("exit")) {
-            System.exit(0);
-        } else if (cmd.equals("login")) {
-            imobiliaria.loggedUser = loginUI(parameters);
-        } else if (cmd.equals("logout")) {
-            imobiliaria.fechaSessao();
-            System.out.println("Sessão terminada.");
-        } else if (cmd.equals("registar")) {
-            try {
-                imobiliaria.registarUtilizador(registarUI(parameters));
-            } catch (UtilizadorExistenteException e) {
-
-            }
-        } else if (cmd.equals("listar")) {
-            listarUI();
-        } else if (cmd.equals("listarHabitaveis")) {
-            // TODO: Professor tem que dizer o quê que é um imóvel habitável. (Rodapé pag6 Enunciado).
-        } else if (cmd.equals("contactos")) {
-            contactosUI();
-        } else {
-            System.out.println("Invalid command.");
-        }
+        return menu.getParams();
     }
 
-    public static Utilizador loginUI(String[] params) {
-        return null;
-    }
+    public static List<String> registarUI() {
+        //TODO - separar isto em 2 metodos registarUIVendedor registarUIComprador
+        // nesta função vai estar o menu de decidir entre vendedor e comprador
+        Menu menu = new Menu();
+        menu.addField("Email");
+        menu.addField("Nome");
+        menu.addField("Password");
+        menu.addField("Morada");
+        menu.addField("Data de Nascimento");
 
-    public static Utilizador registarUI(String[] params) {
-        return null;
+        return menu.getParams();
+
     }
 
     public static void listarUI() {
