@@ -1,5 +1,6 @@
 
 public class Utilizador {
+
     private String email;
     private String nome;
     private String password;
@@ -8,7 +9,7 @@ public class Utilizador {
 
     public Utilizador() {
         email = "";
-        nome = "";
+        nome  = "";
         password = "";
         morada = "";
         dataNascimento = "";

@@ -5,6 +5,12 @@ import java.util.TreeSet;
 import java.util.Map;
 import java.util.Scanner;
 
+enum Commands {
+    EXIT,
+    LOGIN, LOGOUT,
+    LIST, LIST_LIVABLE, CONTACTS,
+    INVALID
+}
 
 public class Imoobiliaria {
 
@@ -13,9 +19,7 @@ public class Imoobiliaria {
 
     private Utilizador loggedUser;
 
-
     // Métodos estáticos
-
     public static void main(String[] args) {
 
         Imoobiliaria imobiliaria = new Imoobiliaria();
