@@ -1,3 +1,10 @@
+
+/**
+ * Escreva a descrição da classe Vendedor aqui.
+ * 
+ * @author (seu nome) 
+ * @version (número de versão ou data)
+ */
 import java.util.ArrayList;
 
 public class Vendedor extends Utilizador {
@@ -60,12 +67,12 @@ public class Vendedor extends Utilizador {
     public Vendedor clone(){
         return new Vendedor(this);
     }
-
+    
     public boolean equals(Object o){
         if(this == o){
             return true;
         }
-        if(o == null || o.getClass() != this.getClass()){
+        if(o == null | o.getClass() != this.getClass()){
             return false;
         }
         Vendedor v = (Vendedor) o;

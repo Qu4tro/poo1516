@@ -1,8 +1,8 @@
 
 /**
- * Escreva a descrição da classe Imovel aqui.
- *
- * @author (seu nome)
+ * Escreva a descrição da classe Imóveis aqui.
+ * 
+ * @author (seu nome) 
  * @version (número de versão ou data)
  */
 public class Imovel extends Imoobiliaria {

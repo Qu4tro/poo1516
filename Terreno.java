@@ -1,8 +1,8 @@
 
 /**
  * Escreva a descrição da classe Terreno aqui.
- *
- * @author Talig81
+ * 
+ * @author (seu nome) 
  * @version (número de versão ou data)
  */
 public class Terreno extends Imovel {
