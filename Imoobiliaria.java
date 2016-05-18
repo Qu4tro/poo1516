@@ -222,15 +222,30 @@ public class Imoobiliaria {
         return null;
     }
 
-    //Todos os utilizadores:
-    //Consultar a lista de todos os imóveis de um dado tipo(Terreno, Moradia, etc) e até um certo preço.
     public List<Imovel> getImovel(String classe, int preco) {
-        return null;
+        ArrayList<Imovel> lista = new ArrayList<Imovel>();
+        return lista.stream().filter(i -> mesmoTipoImovel(classe, i)).filter(i -> i.getPrecoPedido() < preco).collect(Collectors.toList());
     }
+
+    public boolean mesmoTipoImovel(String s, Imovel i){
+        switch(s){
+            case "Terreno" : if( i instanceof Terreno) return true;
+                            break;
+            case "Moradia" : if( i instanceof Moradia) return true;
+                            break;
+            case "Apartamento" : if( i instanceof Apartamento) return true;
+                                break;
+            case "Loja" : if( i instanceof Loja) return true;
+                        break;
+        }
+        return false;
+    }
+    
 
     //Consultar a lista de todos os imóveis habitáveis(até um certo preço)
     public List<Habitavel> getHabitaveis(int preco) {
-        return null;
+        ArrayList<Habitavel> l = new ArrayList<Habitavel>();
+        return l.stream().filter(i -> imoveisHabitaveis(i))
     }
 
     //Obter um mapeamento entre todos os imóveis e respetivos vendedores.
