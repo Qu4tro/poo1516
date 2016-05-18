@@ -82,7 +82,5 @@ public class Comprador extends Utilizador {
         for(Imovel imovel : favoritos) s.append(imovel.toString() + "\n");
         return s.toString();
     }
-    
 
-
-}  
+}

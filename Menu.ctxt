@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Menu()
+comment1.params=
+comment1.target=void\ clearScreen()
+comment2.params=choice
+comment2.target=void\ addField(java.lang.String)
+comment3.params=
+comment3.target=java.util.List\ getParams()
+comment4.params=
+comment4.target=int\ presentChoices()
+comment5.params=
+comment5.target=int\ getChoosen()
+numComments=6

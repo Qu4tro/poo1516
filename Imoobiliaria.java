@@ -6,6 +6,7 @@
  * @version (número de versão ou data)
  */
 
+import javax.rmi.CORBA.Util;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -17,7 +18,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.HashMap;
-
+import java.lang.String;
 
 public class Imoobiliaria {
 
@@ -28,64 +29,103 @@ public class Imoobiliaria {
 
 
     // Métodos estáticos
-
     public static void main(String[] args) {
 
         Imoobiliaria imobiliaria = new Imoobiliaria();
 
-        Scanner scan = new Scanner(System.in);
-        String line;
+        initial_menu(imobiliaria);
+    }
 
-        while (scan.hasNextLine()) {
-            System.out.println("> ");
-            line = scan.nextLine().trim(); // remove leading spaces and check for empty
+    public static void initial_menu(Imoobiliaria imobiliaria) {
 
-            if (line.isEmpty()) {
-                continue;
-            }
+        Menu m = new Menu();
+        List<String> params;
 
-            run_commands(imobiliaria, line);
+        int choice;
+
+        m.addField("Autenticar");
+        m.addField("Registar");
+        m.addField("Continuar sem autenticação");
+
+        choice = m.presentChoices();
+
+        switch (choice) {
+            case 1:
+                params = loginUI();
+                try {
+                    imobiliaria.iniciaSessao(params.get(0), params.get(1));
+                } catch (SemAutorizacaoException e) {
+                    System.out.println("Login incorrecto!");
+                    initial_menu(imobiliaria);
+                }
+                break;
+
+            case 2:
+                params = registarUI();
+                try {
+                    params = registarUI();
+                    Utilizador user = new Utilizador(params.get(0), params.get(1), params.get(2), params.get(3), params.get(4));
+                    imobiliaria.registarUtilizador(user);
+                } catch (UtilizadorExistenteException e) {
+                    System.out.println("Utilizador já existente!");
+                    initial_menu(imobiliaria);
+                }
+                break;
+
+            case 3:
+                noAuthMenu(imobiliaria);
+                break;
+
         }
     }
 
-    public static void run_commands(Imoobiliaria imobiliaria, String line) {
+    public static void noAuthMenu(Imoobiliaria imobiliaria) {
 
-        String[] parameters;
-        String cmd;
+        Menu m = new Menu();
+        List<String> params;
 
-        parameters = line.split("\\s+");
-        cmd = parameters[0];
+        int choice;
 
-        if (cmd.equals("quit") || cmd.equals("exit")) {
-            System.exit(0);
-        } else if (cmd.equals("login")) {
-            imobiliaria.loggedUser = loginUI(parameters);
-        } else if (cmd.equals("logout")) {
-            imobiliaria.fechaSessao();
-            System.out.println("Sessão terminada.");
-        } else if (cmd.equals("registar")) {
-            try {
-                imobiliaria.registarUtilizador(registarUI(parameters));
-            } catch (UtilizadorExistenteException e) {
+        m.addField("Consultar imóveis");
+        m.addField("Consultar imóveis habitáveis");
+        m.addField("Contactos");
 
-            }
-        } else if (cmd.equals("listar")) {
-            listarUI();
-        } else if (cmd.equals("listarHabitaveis")) {
-            // TODO: Professor tem que dizer o quê que é um imóvel habitável. (Rodapé pag6 Enunciado).
-        } else if (cmd.equals("contactos")) {
-            contactosUI();
-        } else {
-            System.out.println("Invalid command.");
+        choice = m.presentChoices();
+
+        switch (choice) {
+            case 1:
+                // TODO: listarUI(imobiliaria);;
+                break;
+            case 2:
+                // TODO: habitaveisUI(imobiliaria);
+                break;
+            case 3:
+                // TODO: contactosUI(imobiliaria);
+                break;
         }
     }
 
-    public static Utilizador loginUI(String[] params) {
-        return null;
+
+    public static List<String> loginUI() {
+        Menu menu = new Menu();
+        menu.addField("Email");
+        menu.addField("Password");
+
+        return menu.getParams();
     }
 
-    public static Utilizador registarUI(String[] params) {
-        return null;
+    public static List<String> registarUI() {
+        //TODO - separar isto em 2 metodos registarUIVendedor registarUIComprador
+        // nesta função vai estar o menu de decidir entre vendedor e comprador
+        Menu menu = new Menu();
+        menu.addField("Email");
+        menu.addField("Nome");
+        menu.addField("Password");
+        menu.addField("Morada");
+        menu.addField("Data de Nascimento");
+
+        return menu.getParams();
+
     }
 
     public static void listarUI() {
@@ -102,7 +142,7 @@ public class Imoobiliaria {
 
         loggedUser = null;
     }
-    
+
     //Validar o acesso à aplicação utilizando as credenciais(email e password)
     public void iniciaSessao(String email, String password) throws SemAutorizacaoException {
         // TODO: Há 3 razões pela qual esta função deve falhar:
@@ -119,6 +159,7 @@ public class Imoobiliaria {
                         // password errada
                         throw new SemAutorizacaoException("Password errada");
                     }
+
                 }
                 else throw new SemAutorizacaoException("O utilizado "+email+" não existe");
             }
@@ -128,8 +169,8 @@ public class Imoobiliaria {
             throw new SemAutorizacaoException("O utilizador já iniciou sessão");
         }
             // Utilizador já autenticado
+         
     }
-
     public void fechaSessao() {
         loggedUser = null;
     }
@@ -153,7 +194,6 @@ public class Imoobiliaria {
         // TODO: Aqui provavelmente é melhor simplesmente verificar se existe algum user com email igual.
         return users.contains(user);
     }
-    
     //Vendedores(é necessário estarem previamente autenticados)
     //Colocar um imóvel à venda;
     public void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException {
@@ -209,10 +249,12 @@ public class Imoobiliaria {
         return false;
     }
     
+/*
     //Consultar a lista de todos os imóveis habitáveis(até um certo preço)
     public List<Habitavel> getHabitaveis(int preco) {
-        return null;
-    }
+        ArrayList<Habitavel> l = new ArrayList<Habitavel>();
+        return l.stream().filter(i -> imoveisHabitaveis(i));
+    }*/
 
     //Obter um mapeamento entre todos os imóveis e respetivos vendedores.
     public Map<Imovel, Vendedor> getMapeamentoImoveis() {

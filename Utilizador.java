@@ -5,7 +5,7 @@
  * @author (seu nome) 
  * @version (número de versão ou data)
  */
-public abstract class Utilizador {
+public class Utilizador {
     private String email;
     private String nome;
     private String password;
@@ -76,7 +76,9 @@ public abstract class Utilizador {
         this.dataNascimento = data;
     }
 
-    public abstract Utilizador clone();
+    public Utilizador clone(){
+        return new Utilizador(this);
+    }
     
 
     public boolean equals(Object o) {

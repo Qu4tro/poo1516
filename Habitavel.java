@@ -1,18 +1,32 @@
-
-/**
- * Escreva a descrição da interface Habitavel aqui.
+ /* Escreva a descrição da classe Habitavel aqui.
  * 
  * @author (seu nome) 
- * @version (número da versão ou data)
+ * @version (número de versão ou data)
  */
-
-public interface Habitavel
+public class Habitavel
 {
+    // variáveis de instância - substitua o exemplo abaixo pelo seu próprio
+    private int x;
+
     /**
-     * Exemplo de um cabeçalho de método - substitua este comentário pelo seu
-     * 
-     * @param  y    exemplo de um parâmetro de método
-     * @return        o resultado produzido pelo sampleMethod 
+     * COnstrutor para objetos da classe Habitavel
      */
-    int sampleMethod(int y);
+    public Habitavel()
+    {
+        // inicializa variáveis de instância
+        x = 0;
+    }
+
+    /**
+     * Exemplo de método - substitua este comentário pelo seu próprio
+     * 
+     * @param  y   exemplo de um parâmetro de método
+     * @return     a soma de x com y 
+     */
+    public int sampleMethod(int y)
+    {
+        // ponha seu código aqui
+        return x + y;
+    }
+
 }
