@@ -5,7 +5,7 @@
  * @author (seu nome) 
  * @version (número de versão ou data)
  */
-public class Imovel extends Imoobiliaria {
+public abstract class Imovel extends Imoobiliaria {
     private String rua;
     private double precoPedido;
     private double precoMinimo;
@@ -52,10 +52,8 @@ public class Imovel extends Imoobiliaria {
         this.precoMinimo = precoM;
     }
 
-    public Imovel clone() {
-        return new Imovel(this);
-    }
-
+    public abstract Imovel clone();
+    
     public boolean Imovel(Object o) {
         if (o == this) {
             return true;

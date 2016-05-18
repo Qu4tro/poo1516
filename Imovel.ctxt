@@ -1,0 +1,26 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Imovel()
+comment1.params=rua\ precoP\ precoM
+comment1.target=Imovel(java.lang.String,\ double,\ double)
+comment10.params=o
+comment10.target=boolean\ Imovel(java.lang.Object)
+comment11.params=
+comment11.target=java.lang.String\ toString()
+comment2.params=i
+comment2.target=Imovel(Imovel)
+comment3.params=
+comment3.target=java.lang.String\ getRua()
+comment4.params=
+comment4.target=double\ getPrecoPedido()
+comment5.params=
+comment5.target=double\ getPrecoMinimo()
+comment6.params=rua
+comment6.target=void\ setRua(java.lang.String)
+comment7.params=precoP
+comment7.target=void\ setPrecoPedido(double)
+comment8.params=precoM
+comment8.target=void\ setPrecoMinimo(double)
+comment9.params=
+comment9.target=Imovel\ clone()
+numComments=12

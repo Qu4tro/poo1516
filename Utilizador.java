@@ -76,9 +76,10 @@ public class Utilizador {
         this.dataNascimento = data;
     }
 
-    public Utilizador clone() {
+    public Utilizador clone(){
         return new Utilizador(this);
     }
+    
 
     public boolean equals(Object o) {
         if (o == this) {

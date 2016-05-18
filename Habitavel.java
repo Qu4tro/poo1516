@@ -1,6 +1,4 @@
-
-/**
- * Escreva a descrição da classe Habitavel aqui.
+ /* Escreva a descrição da classe Habitavel aqui.
  * 
  * @author (seu nome) 
  * @version (número de versão ou data)
@@ -30,4 +28,5 @@ public class Habitavel
         // ponha seu código aqui
         return x + y;
     }
+
 }
