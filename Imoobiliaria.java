@@ -108,7 +108,7 @@ public class Imoobiliaria {
 
         loggedUser = null;
     }
-    
+
     //Validar o acesso à aplicação utilizando as credenciais(email e password)
     public void iniciaSessao(String email, String password) throws SemAutorizacaoException {
         // TODO: Há 3 razões pela qual esta função deve falhar:
@@ -125,15 +125,13 @@ public class Imoobiliaria {
                         // password errada
                         throw new SemAutorizacaoException("Password errada");
                     }
-                }
-                else throw new SemAutorizacaoException("O utilizado "+email+" não existe");
+                } else throw new SemAutorizacaoException("O utilizado " + email + " não existe");
             }
             // Não há utilizador registado na aplicação;
-        } 
-        else {
+        } else {
             throw new SemAutorizacaoException("O utilizador já iniciou sessão");
         }
-            // Utilizador já autenticado
+        // Utilizador já autenticado
     }
 
     public void fechaSessao() {
@@ -159,19 +157,21 @@ public class Imoobiliaria {
         // TODO: Aqui provavelmente é melhor simplesmente verificar se existe algum user com email igual.
         return users.contains(user);
     }
-    
+
     //Vendedores(é necessário estarem previamente autenticados)
     //Colocar um imóvel à venda;
     public void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException {
-            if(loggedUser instanceof Vendedor && im != null){
-                if(imoveis.contains(im)){
-                  throw new ImovelExisteException("Já existe este imóvel");
-                }
-                else imoveis.add(im);
+        if (loggedUser instanceof Vendedor && im != null) {
+            if (imoveis.contains(im)) {
+                throw new ImovelExisteException("Já existe este imóvel");
+            } else imoveis.add(im);
 
-            }
-            else throw new SemAutorizacaoException("O utilizador não tem acesso")
-          }
+        } else {
+            throw new SemAutorizacaoException("O utilizador não tem acesso");
+        }
+    }
+
+
     
     //Visualizar uma lista com as datas( e emails, caso exista essa informação) das 10 últimas consultas
     //aos imóveis que tem para venda

@@ -28,10 +28,11 @@ public class Menu {
 
         int i = 1;
         for (String s : choices) {
-            System.out.println(s + ": ");
+            System.out.print(s + ": ");
             i++;
 
             params.add(scanner.nextLine());
+            System.out.print("\n");
         }
 
 
