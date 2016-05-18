@@ -7,18 +7,11 @@
  */
 
 import javax.rmi.CORBA.Util;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.lang.String;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.HashMap;
-import java.lang.String;
+
 
 public class Imoobiliaria {
 
@@ -115,8 +108,34 @@ public class Imoobiliaria {
     }
 
     public static List<String> registarUI() {
-        //TODO - separar isto em 2 metodos registarUIVendedor registarUIComprador
-        // nesta função vai estar o menu de decidir entre vendedor e comprador
+
+        int choice;
+        List<String> params;
+        Menu menu = new Menu();
+
+        menu.addField("Comprador");
+        menu.addField("Vendedor");
+
+        choice = menu.presentChoices();
+
+        switch (choice) {
+            case 1:
+                params = registarUIParams();
+                params.add(0, "comprador");
+                break;
+            case 2:
+                params = registarUIParams();
+                params.add(0, "vendedor");
+                break;
+            case 3:
+                // TODO: contactosUI(imobiliaria);
+                break;
+        }
+
+        return null;
+    }
+
+    public static List<String> registarUIParams(){
         Menu menu = new Menu();
         menu.addField("Email");
         menu.addField("Nome");
@@ -127,6 +146,8 @@ public class Imoobiliaria {
         return menu.getParams();
 
     }
+
+
 
     public static void listarUI() {
     }
@@ -145,11 +166,6 @@ public class Imoobiliaria {
 
     //Validar o acesso à aplicação utilizando as credenciais(email e password)
     public void iniciaSessao(String email, String password) throws SemAutorizacaoException {
-        // TODO: Há 3 razões pela qual esta função deve falhar:
-        //      O utilizador não existe;
-        //      Password errada;
-        //      Utilizador já autenticado
-        // E mesmo assim porquê é que só mandamos 1 erro?
         if (loggedUser == null) {
             for (Utilizador utilizador : users) {
                 if (email.equals(utilizador.getEmail())) {
@@ -159,18 +175,15 @@ public class Imoobiliaria {
                         // password errada
                         throw new SemAutorizacaoException("Password errada");
                     }
-
-                }
-                else throw new SemAutorizacaoException("O utilizado "+email+" não existe");
+                } else throw new SemAutorizacaoException("O utilizado " + email + " não existe");
             }
             // Não há utilizador registado na aplicação;
-        } 
-        else {
+        } else {
             throw new SemAutorizacaoException("O utilizador já iniciou sessão");
         }
-            // Utilizador já autenticado
-         
+        // Utilizador já autenticado
     }
+
     public void fechaSessao() {
         loggedUser = null;
     }
@@ -194,19 +207,21 @@ public class Imoobiliaria {
         // TODO: Aqui provavelmente é melhor simplesmente verificar se existe algum user com email igual.
         return users.contains(user);
     }
+
     //Vendedores(é necessário estarem previamente autenticados)
     //Colocar um imóvel à venda;
     public void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException {
-            if(loggedUser instanceof Vendedor && im != null){
-                if(imoveis.contains(im)){
-                  throw new ImovelExisteException("Já existe este imóvel");
-                }
-                else imoveis.add(im);
+        if (loggedUser instanceof Vendedor && im != null) {
+            if (imoveis.contains(im)) {
+                throw new ImovelExisteException("Já existe este imóvel");
+            } else imoveis.add(im);
 
-            }
-            else {throw new SemAutorizacaoException("O utilizador não tem acesso");}
-        
+        } else {
+            throw new SemAutorizacaoException("O utilizador não tem acesso");
+        }
     }
+
+
     
     //Visualizar uma lista com as datas( e emails, caso exista essa informação) das 10 últimas consultas
     //aos imóveis que tem para venda
@@ -228,11 +243,11 @@ public class Imoobiliaria {
         return null;
     }
 
-    //Todos os utilizadores:
-    //Consultar a lista de todos os imóveis de um dado tipo(Terreno, Moradia, etc) e até um certo preço.
     public List<Imovel> getImovel(String classe, int preco) {
-        ArrayList<Imovel> lista = new ArrayList<Imovel>();
-        return lista.stream().filter(i -> mesmoTipoImovel(classe, i)).filter(i -> i.getPrecoPedido() < preco).collect(Collectors.toList());
+        return imoveis.stream()
+                      .filter(i -> mesmoTipoImovel(classe, i))
+                      .filter(i -> i.getPrecoPedido() < preco)
+                      .collect(Collectors.toList());
     }
 
     public boolean mesmoTipoImovel(String s, Imovel i){
@@ -249,21 +264,17 @@ public class Imoobiliaria {
         return false;
     }
     
-/*
+
     //Consultar a lista de todos os imóveis habitáveis(até um certo preço)
+    /*
     public List<Habitavel> getHabitaveis(int preco) {
         ArrayList<Habitavel> l = new ArrayList<Habitavel>();
-        return l.stream().filter(i -> imoveisHabitaveis(i));
-    }*/
+        return l.stream().filter(i -> imoveisHabitaveis(i))
+    }
+    */
 
     //Obter um mapeamento entre todos os imóveis e respetivos vendedores.
     public Map<Imovel, Vendedor> getMapeamentoImoveis() {
-        HashMap<Imovel,Vendedor> res = new HashMap<Imovel,Vendedor>();
-        for(Imovel i : imoveis){
-            
-       
-        }
-        
         return null;
     }
 
