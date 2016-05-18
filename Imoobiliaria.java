@@ -163,10 +163,15 @@ public class Imoobiliaria {
     //Vendedores(é necessário estarem previamente autenticados)
     //Colocar um imóvel à venda;
     public void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException {
-        if (im != null) {
-            imoveis.add(im);
-        }
-    }
+            if(loggedUser instanceof Vendedor && im != null){
+                if(imoveis.contains(im)){
+                  throw new ImovelExisteException("Já existe este imóvel");
+                }
+                else imoveis.add(im);
+
+            }
+            else throw new SemAutorizacaoException("O utilizador não tem acesso")
+          }
     
     //Visualizar uma lista com as datas( e emails, caso exista essa informação) das 10 últimas consultas
     //aos imóveis que tem para venda
