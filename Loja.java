@@ -1,8 +1,8 @@
 
 /**
  * Escreva a descrição da classe Loja aqui.
- *
- * @author (seu nome)
+ * 
+ * @author (seu nome) 
  * @version (número de versão ou data)
  */
 public class Loja extends Imovel {

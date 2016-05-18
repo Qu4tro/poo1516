@@ -1,5 +1,11 @@
 
-public class Utilizador {
+/**
+ * Escreva a descrição da classe Utilizador aqui.
+ * 
+ * @author (seu nome) 
+ * @version (número de versão ou data)
+ */
+public abstract class Utilizador {
     private String email;
     private String nome;
     private String password;
@@ -70,9 +76,8 @@ public class Utilizador {
         this.dataNascimento = data;
     }
 
-    public Utilizador clone() {
-        return new Utilizador(this);
-    }
+    public abstract Utilizador clone();
+    
 
     public boolean equals(Object o) {
         if (o == this) {

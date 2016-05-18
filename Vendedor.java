@@ -1,3 +1,10 @@
+
+/**
+ * Escreva a descrição da classe Vendedor aqui.
+ * 
+ * @author (seu nome) 
+ * @version (número de versão ou data)
+ */
 import java.util.ArrayList;
 
 public class Vendedor extends Utilizador {
