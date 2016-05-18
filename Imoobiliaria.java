@@ -6,6 +6,7 @@
  * @version (número de versão ou data)
  */
 
+import javax.rmi.CORBA.Util;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -49,7 +50,8 @@ public class Imoobiliaria {
                 try {
                     imobiliaria.iniciaSessao(params.get(0), params.get(1));
                 } catch (SemAutorizacaoException e) {
-                    //TODO - se ele tentar inicar sessão e falhar
+                    System.out.println("Login incorrecto!");
+                    initial_menu(imobiliaria);
                 }
                 break;
 
@@ -57,17 +59,44 @@ public class Imoobiliaria {
                 params = registarUI();
                 try {
                     params = registarUI();
-                    // criar Utilizador aqui com os params recebidos
-                    imobiliaria.registarUtilizador(null);
+                    Utilizador user = new Utilizador(params.get(0), params.get(1), params.get(2), params.get(3), params.get(4));
+                    imobiliaria.registarUtilizador(user);
                 } catch (UtilizadorExistenteException e) {
-                    //TODO - se ele tentar registar e falhar
+                    System.out.println("Utilizador já existente!");
+                    initial_menu(imobiliaria);
                 }
                 break;
 
             case 3:
-                ;
+                noAuthMenu(imobiliaria);
                 break;
 
+        }
+    }
+
+    public static void noAuthMenu(Imoobiliaria imobiliaria) {
+
+        Menu m = new Menu();
+        List<String> params;
+
+        int choice;
+
+        m.addField("Consultar imóveis");
+        m.addField("Consultar imóveis habitáveis");
+        m.addField("Contactos");
+
+        choice = m.presentChoices();
+
+        switch (choice) {
+            case 1:
+                // TODO: listarUI(imobiliaria);
+                break;
+            case 2:
+                // TODO: habitaveisUI(imobiliaria);
+                break;
+            case 3:
+                // TODO: contactosUI(imobiliaria);
+                break;
         }
     }
 
