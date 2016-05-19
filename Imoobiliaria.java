@@ -1,14 +1,18 @@
 
 
+import java.awt.image.ImageObserver;
 import java.util.*;
 import java.lang.String;
 import java.util.stream.Collectors;
+import java.util.function.Supplier;
+
 
 
 public class Imoobiliaria {
 
-    private ArrayList<Imovel> imoveis;
+    //private ArrayList<Imovel> imoveis;
     //private ArrayList<Utilizador> users;
+    private HashMap<String, Imovel> imoveis;
     private HashMap<String, Utilizador> users;
 
     private Utilizador loggedUser;
@@ -35,8 +39,7 @@ public class Imoobiliaria {
         m.addField("Continuar sem autenticação");
         m.addField("Sair");
 
-        m.presentChoices();
-        choice = m.getChoosen();
+        choice = m.presentChoices();
 
         switch (choice) {
             case 1:
@@ -58,7 +61,10 @@ public class Imoobiliaria {
 
             case 2:
                 try {
-                    params = registarUI();
+                    params = registarUI(imobiliaria);
+                    if (params == null) {
+                        return;
+                    }
                     if (params.get(0).equals("comprador")) {
                         user = new Comprador(params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), null);
                     } else if (params.get(0).equals("vendedor")) {
@@ -76,7 +82,7 @@ public class Imoobiliaria {
                 noAuthMenu(imobiliaria);
                 break;
 
-            case 4:
+            case 0:
                 break;
 
         }
@@ -91,7 +97,7 @@ public class Imoobiliaria {
         return menu.getParams();
     }
 
-    public static List<String> registarUI() {
+    public static List<String> registarUI(Imoobiliaria imoobiliaria) {
 
         int choice;
         List<String> params = null;
@@ -99,9 +105,9 @@ public class Imoobiliaria {
 
         menu.addField("Comprador");
         menu.addField("Vendedor");
+        menu.addField("Voltar");
 
-        menu.presentChoices();
-        choice = menu.getChoosen();
+        choice = menu.presentChoices();
 
         switch (choice) {
             case 1:
@@ -112,6 +118,9 @@ public class Imoobiliaria {
                 params = registarUIParams();
                 params.add(0, "vendedor");
                 break;
+            case 0:
+                initial_menu(imoobiliaria);
+                return null;
         }
 
         return params;
@@ -141,8 +150,7 @@ public class Imoobiliaria {
         m.addField("Contactos");
         m.addField("Voltar");
 
-        m.presentChoices();
-        choice = m.getChoosen();
+        choice = m.presentChoices();
 
         switch (choice) {
             case 1:
@@ -154,7 +162,7 @@ public class Imoobiliaria {
             case 3:
                 contactosUI(imobiliaria);
                 break;
-            case 4:
+            case 0:
                 initial_menu(imobiliaria);
                 break;
         }
@@ -173,8 +181,7 @@ public class Imoobiliaria {
         m.addField("Contactos");
         m.addField("Logout");
 
-        m.presentChoices();
-        choice = m.getChoosen();
+        choice = m.presentChoices();
 
         switch (choice) {
             case 1:
@@ -189,7 +196,7 @@ public class Imoobiliaria {
             case 4:
                 contactosUI(imobiliaria);
                 break;
-            case 5:
+            case 0:
                 imobiliaria.fechaSessao();
                 initial_menu(imobiliaria);
                 break;
@@ -210,8 +217,7 @@ public class Imoobiliaria {
         m.addField("Contactos");
         m.addField("Logout");
 
-        m.presentChoices();
-        choice = m.getChoosen();
+        choice = m.presentChoices();
 
         switch (choice) {
             case 1:
@@ -229,7 +235,7 @@ public class Imoobiliaria {
             case 5:
                 contactosUI(imobiliaria);
                 break;
-            case 6:
+            case 0:
                 imobiliaria.fechaSessao();
                 initial_menu(imobiliaria);
                 break;
@@ -248,7 +254,7 @@ public class Imoobiliaria {
     }
 
     public static void habitaveisUI(Imoobiliaria imobiliaria) {
-//TODO
+        //TODO fhikjik
     }
 
     public static void favoritosUI(Imoobiliaria imobiliaria) {
@@ -265,7 +271,7 @@ public class Imoobiliaria {
 
     // Métodos de instância
     public Imoobiliaria() {
-        imoveis = new ArrayList<>();
+        imoveis = new HashMap<>();
         users = new HashMap<>();
 
         loggedUser = null;
@@ -297,7 +303,7 @@ public class Imoobiliaria {
     public void registarUtilizador(Utilizador user) throws UtilizadorExistenteException {
 
         if (user != null && !(users.containsKey(user.getEmail()))) {
-            users.put(user.getEmail(), user);
+            users.put(user.getEmail(), user.clone());
 
         } else {
             throw new UtilizadorExistenteException("Este utilizador já existe");
@@ -311,9 +317,9 @@ public class Imoobiliaria {
     //Colocar um imóvel à venda;
     public void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException {
         if (loggedUser instanceof Vendedor && im != null) {
-            if (imoveis.contains(im)) {
+            if (imoveis.containsKey(im.getId())) {
                 throw new ImovelExisteException("Já existe este imóvel");
-            } else imoveis.add(im);
+            } else imoveis.put(im.getId(), im.clone());
 
         } else {
             throw new SemAutorizacaoException("O utilizador não tem acesso");
@@ -326,6 +332,7 @@ public class Imoobiliaria {
     //aos imóveis que tem para venda
     //são geradas pelo métodos getImovel(String,Int),getHbitaveis(int),getMapearmentoImoveis() e getFavoritos()
     public List<Consulta> getConsultas() throws SemAutorizacaoException {
+        //TODO
         return null;
     }
     
@@ -333,17 +340,17 @@ public class Imoobiliaria {
     public void setEstado(String idImovel, String estado) throws ImovelInexistenteException,
             SemAutorizacaoException,
             EstadoInvalidoException {
-
+        // TODO
     }
 
     //Obter um conjunto com os códigos dos imóveis mais consultados(ou seja, com mais de N consultas).
     //refere-se aos imóveis do vendedor que está a fazer a consulta
     public Set<String> getTopImoveis(int n) {
-        return null;
+        return null; // TODO
     }
 
     public List<Imovel> getImovel(String classe, int preco) {
-        return imoveis.stream()
+        return imoveis.values().stream()
                       .filter(i -> mesmoTipoImovel(classe, i))
                       .filter(i -> i.getPrecoPedido() < preco)
                       .collect(Collectors.toList());
@@ -373,7 +380,7 @@ public class Imoobiliaria {
     
 
     //Consultar a lista de todos os imóveis habitáveis(até um certo preço)
-    /*
+    /* // TODO
     public List<Habitavel> getHabitaveis(int preco) {
         ArrayList<Habitavel> l = new ArrayList<Habitavel>();
         return l.stream().filter(i -> imoveisHabitaveis(i))
@@ -382,17 +389,41 @@ public class Imoobiliaria {
 
     //Obter um mapeamento entre todos os imóveis e respetivos vendedores.
     public Map<Imovel, Vendedor> getMapeamentoImoveis() {
-        return null;
+        return imoveis.values().stream()
+                .collect(Collectors.toMap(e -> e, e -> e.getVendedor()));
     }
 
     //Compradores registados:
     //Marcar um imóvel como favorito.
     public void setFavorito(String idImovel) throws ImovelInexistenteException, SemAutorizacaoException {
+        if (loggedAsBuyer()) {
+            if (imoveis.containsKey(idImovel)) {
+                Comprador c = (Comprador) loggedUser;
+                c.addFav(idImovel);
+            } else {
+                throw new ImovelInexistenteException("Imóvel não existe");
+            }
+        } else {
+            throw new SemAutorizacaoException("Não está autenticado como comprador.");
+        }
     }
     
     //Consultar imóveis favoritos ordenados por preço.
     public TreeSet<Imovel> getFavoritos() throws SemAutorizacaoException {
-        return null;
+
+        if (loggedAsBuyer()) {
+
+            Supplier<TreeSet<Imovel>> supplier = () -> new TreeSet<>(new ComparatorPreco());
+
+            Comprador c = (Comprador) loggedUser;
+            return c.getFavoritos()
+                    .stream()
+                    .map(id -> imoveis.get(id))
+                    .collect(Collectors.toCollection(supplier));
+        } else {
+            throw new SemAutorizacaoException("");
+        }
+
     }
 
     public boolean loggedAsBuyer() {

@@ -5,7 +5,7 @@ public class Menu {
 
 
     public Menu() {
-        choices = new ArrayList<String>(10);
+        choices = new ArrayList<String>();
     }
 
     private void clearScreen() {
@@ -39,31 +39,61 @@ public class Menu {
         return params;
     }
 
-    public void presentChoices() {
+    public int presentChoices() {
 
         clearScreen();
 
-        int i = 1;
-        for (String s : choices) {
-            System.out.println("[" + i + "] - " + s);
-            i++;
+        int last_index = choices.size() - 1;
+
+        for (int i = 0; i < last_index; i++) {
+            System.out.println("[" + (i + 1) + "] - " + choices.get(i));
         }
 
+        System.out.println("[0] - " + choices.get(last_index));
 
+        return getChoosenFromUser();
+    }
+
+    public int presentChoices(int max) {
+
+        clearScreen();
+
+        int choice = -1;
+
+        for (int i = 0; i < choices.size() - 1; i++) {
+            System.out.println("[" + (i + 1) + "] - " + choices.get(i));
+
+            if (i % max == max - 1) {
+                if (i != choices.size() - 2) {
+                    System.out.println("[" + (i + 2) + "] - " + "Mais");
+                }
+                System.out.println("[" + 0 + "] - " + choices.get(choices.size() - 1));
+
+                choice = getChoosenFromUser();
+                if (choice != i + 2) {
+                    return choice;
+                }
+            }
+
+
+        }
+
+        System.out.println("[" + 0 + "] - " + choices.get(choices.size() - 1));
+        choice = getChoosenFromUser();
+        return choice;
     }
 
 
-    public int getChoosen() {
+    private int getChoosenFromUser() {
 
         System.out.print("Escolha a sua opção: ");
         int choice;
         Scanner scanner = new Scanner(System.in);
 
         while (scanner.hasNext()) {
-
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
-                if (choice > 0 && choice <= choices.size()) {
+                if (choice >= 0 && choice <= choices.size()) {
                     return choice;
                 }
             }

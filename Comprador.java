@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Comprador extends Utilizador {
 
-    private ArrayList<Imovel> favoritos;
+    private ArrayList<String> favoritos;
 
     public Comprador() {
         super();
@@ -18,7 +18,7 @@ public class Comprador extends Utilizador {
 
     public Comprador(String email, String nom, String pass, String mor, String dataN, ArrayList<Imovel> favor) {
         super(email, nom, pass, mor, dataN);
-        this.favoritos = new ArrayList<Imovel>();
+        this.favoritos = new ArrayList<>();
     }
 
     public Comprador(Utilizador vendedor) {
@@ -32,25 +32,18 @@ public class Comprador extends Utilizador {
         setFavoritos(favoritos.getFavoritos());
     }
 
-    public ArrayList<Imovel> getFavoritos() {
-        ArrayList<Imovel> res = new ArrayList<Imovel>();
-        for(Imovel i: favoritos){
-            res.add(i.clone());
-        }
-        return res;
+    public ArrayList<String> getFavoritos() {
+        return (ArrayList<String>) favoritos.clone();
     }
 
-    public void setFavoritos(ArrayList<Imovel> favoritos) {
+    public void setFavoritos(ArrayList<String> favoritos) {
         // TODO: Verificar se idMovel existe, se n existe throw ImovelInexistente
-        this.favoritos.clear();
-        for(Imovel i : favoritos){
-            this.favoritos.add(i.clone());
-        }
+        this.favoritos = (ArrayList<String>) favoritos.clone();
     }
 
-    public void addFav(Imovel imovel) {
-        if (imovel != null) {
-            favoritos.add(imovel.clone());
+    public void addFav(String idImovel) {
+        if (idImovel != null) {
+            favoritos.add(idImovel);
         }
     }
 
@@ -79,7 +72,7 @@ public class Comprador extends Utilizador {
     
     public String toString(){
         StringBuilder s = new StringBuilder();
-        for(Imovel imovel : favoritos) s.append(imovel.toString() + "\n");
+        for (String imovel : favoritos) s.append(imovel + "\n");
         return s.toString();
     }
 
