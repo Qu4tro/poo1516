@@ -1,22 +1,15 @@
 
-/**
- * Escreva a descrição da classe Imoobiliaria aqui.
- * 
- * @author (seu nome) 
- * @version (número de versão ou data)
- */
 
-import javax.rmi.CORBA.Util;
 import java.util.*;
 import java.lang.String;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
 public class Imoobiliaria {
 
     private ArrayList<Imovel> imoveis;
-    private ArrayList<Utilizador> users;
+    //private ArrayList<Utilizador> users;
+    private HashMap<String, Utilizador> users;
 
     private Utilizador loggedUser;
 
@@ -33,14 +26,17 @@ public class Imoobiliaria {
 
         Menu m = new Menu();
         List<String> params;
+        Utilizador user = null;
 
         int choice;
 
         m.addField("Autenticar");
         m.addField("Registar");
         m.addField("Continuar sem autenticação");
+        m.addField("Sair");
 
-        choice = m.presentChoices();
+        m.presentChoices();
+        choice = m.getChoosen();
 
         switch (choice) {
             case 1:
@@ -49,52 +45,40 @@ public class Imoobiliaria {
                     imobiliaria.iniciaSessao(params.get(0), params.get(1));
                 } catch (SemAutorizacaoException e) {
                     System.out.println("Login incorrecto!");
+                    new Scanner(System.in).nextLine();
                     initial_menu(imobiliaria);
+                    return;
+                }
+                if (imobiliaria.loggedAsBuyer()) {
+                    buyerMenu(imobiliaria);
+                } else if (imobiliaria.loggedAsSeller()) {
+                    sellerMenu(imobiliaria);
                 }
                 break;
 
             case 2:
-                params = registarUI();
                 try {
                     params = registarUI();
-                    Utilizador user = new Utilizador(params.get(0), params.get(1), params.get(2), params.get(3), params.get(4));
+                    if (params.get(0).equals("comprador")) {
+                        user = new Comprador(params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), null);
+                    } else if (params.get(0).equals("vendedor")) {
+                        user = new Vendedor(params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), null, null);
+                    }
                     imobiliaria.registarUtilizador(user);
                 } catch (UtilizadorExistenteException e) {
                     System.out.println("Utilizador já existente!");
-                    initial_menu(imobiliaria);
+                    new Scanner(System.in).nextLine();
                 }
+                initial_menu(imobiliaria);
                 break;
 
             case 3:
                 noAuthMenu(imobiliaria);
                 break;
 
-        }
-    }
-
-    public static void noAuthMenu(Imoobiliaria imobiliaria) {
-
-        Menu m = new Menu();
-        List<String> params;
-
-        int choice;
-
-        m.addField("Consultar imóveis");
-        m.addField("Consultar imóveis habitáveis");
-        m.addField("Contactos");
-
-        choice = m.presentChoices();
-
-        switch (choice) {
-            case 1:
-                // TODO: listarUI(imobiliaria);;
+            case 4:
                 break;
-            case 2:
-                // TODO: habitaveisUI(imobiliaria);
-                break;
-            case 3:
-                // TODO: contactosUI(imobiliaria);
-                break;
+
         }
     }
 
@@ -110,13 +94,14 @@ public class Imoobiliaria {
     public static List<String> registarUI() {
 
         int choice;
-        List<String> params;
+        List<String> params = null;
         Menu menu = new Menu();
 
         menu.addField("Comprador");
         menu.addField("Vendedor");
 
-        choice = menu.presentChoices();
+        menu.presentChoices();
+        choice = menu.getChoosen();
 
         switch (choice) {
             case 1:
@@ -127,15 +112,12 @@ public class Imoobiliaria {
                 params = registarUIParams();
                 params.add(0, "vendedor");
                 break;
-            case 3:
-                // TODO: contactosUI(imobiliaria);
-                break;
         }
 
-        return null;
+        return params;
     }
 
-    public static List<String> registarUIParams(){
+    public static List<String> registarUIParams() {
         Menu menu = new Menu();
         menu.addField("Email");
         menu.addField("Nome");
@@ -147,19 +129,144 @@ public class Imoobiliaria {
 
     }
 
+    public static void noAuthMenu(Imoobiliaria imobiliaria) {
 
+        Menu m = new Menu();
+        List<String> params;
 
-    public static void listarUI() {
+        int choice;
+
+        m.addField("Consultar imóveis");
+        m.addField("Consultar imóveis habitáveis");
+        m.addField("Contactos");
+        m.addField("Voltar");
+
+        m.presentChoices();
+        choice = m.getChoosen();
+
+        switch (choice) {
+            case 1:
+                listarUI(imobiliaria);
+                break;
+            case 2:
+                habitaveisUI(imobiliaria);
+                break;
+            case 3:
+                contactosUI(imobiliaria);
+                break;
+            case 4:
+                initial_menu(imobiliaria);
+                break;
+        }
     }
 
-    public static void contactosUI() {
+    public static void buyerMenu(Imoobiliaria imobiliaria) {
+
+        Menu m = new Menu();
+        List<String> params;
+
+        int choice;
+
+        m.addField("Consultar imóveis");
+        m.addField("Consultar imóveis habitáveis");
+        m.addField("Consultar imóveis favoritos");
+        m.addField("Contactos");
+        m.addField("Logout");
+
+        m.presentChoices();
+        choice = m.getChoosen();
+
+        switch (choice) {
+            case 1:
+                listarUI(imobiliaria);
+                break;
+            case 2:
+                habitaveisUI(imobiliaria);
+                break;
+            case 3:
+                favoritosUI(imobiliaria);
+                break;
+            case 4:
+                contactosUI(imobiliaria);
+                break;
+            case 5:
+                imobiliaria.fechaSessao();
+                initial_menu(imobiliaria);
+                break;
+        }
     }
 
+    public static void sellerMenu(Imoobiliaria imobiliaria) {
+
+        Menu m = new Menu();
+        List<String> params;
+
+        int choice;
+
+        m.addField("Consultar imóveis");
+        m.addField("Consultar imóveis habitáveis");
+        m.addField("Consultar seus imóveis em venda");
+        m.addField("Consultar vendas passadas");
+        m.addField("Contactos");
+        m.addField("Logout");
+
+        m.presentChoices();
+        choice = m.getChoosen();
+
+        switch (choice) {
+            case 1:
+                listarUI(imobiliaria);
+                break;
+            case 2:
+                habitaveisUI(imobiliaria);
+                break;
+            case 3:
+                sellerImoveisUI(imobiliaria);
+                break;
+            case 4:
+                sellLogUI(imobiliaria);
+                break;
+            case 5:
+                contactosUI(imobiliaria);
+                break;
+            case 6:
+                imobiliaria.fechaSessao();
+                initial_menu(imobiliaria);
+                break;
+        }
+    }
+
+
+    public static void listarUI(Imoobiliaria imobiliaria) {
+        Menu m = new Menu();
+//TODO
+
+    }
+
+    public static void contactosUI(Imoobiliaria imobiliaria) {
+//TODO
+    }
+
+    public static void habitaveisUI(Imoobiliaria imobiliaria) {
+//TODO
+    }
+
+    public static void favoritosUI(Imoobiliaria imobiliaria) {
+        //TODO
+    }
+
+    public static void sellerImoveisUI(Imoobiliaria imobiliaria) {
+        //TODO
+    }
+
+    public static void sellLogUI(Imoobiliaria imobiliaria) {
+        //TODO
+    }
 
     // Métodos de instância
     public Imoobiliaria() {
         imoveis = new ArrayList<>();
-        users = new ArrayList<>();
+        users = new HashMap<>();
 
         loggedUser = null;
     }
@@ -167,21 +274,19 @@ public class Imoobiliaria {
     //Validar o acesso à aplicação utilizando as credenciais(email e password)
     public void iniciaSessao(String email, String password) throws SemAutorizacaoException {
         if (loggedUser == null) {
-            for (Utilizador utilizador : users) {
-                if (email.equals(utilizador.getEmail())) {
-                    if (password.equals(utilizador.getPassword())) {
-                        loggedUser = utilizador;
-                    } else {
-                        // password errada
-                        throw new SemAutorizacaoException("Password errada");
-                    }
-                } else throw new SemAutorizacaoException("O utilizado " + email + " não existe");
+            if (users.containsKey(email)) {
+                Utilizador utilizador = users.get(email);
+                if (password.equals(utilizador.getPassword())) {
+                    loggedUser = utilizador;
+                } else {
+                    throw new SemAutorizacaoException("Password errada");
+                }
+            } else {
+                throw new SemAutorizacaoException("O utilizado " + email + " não existe");
             }
-            // Não há utilizador registado na aplicação;
         } else {
             throw new SemAutorizacaoException("O utilizador já iniciou sessão");
         }
-        // Utilizador já autenticado
     }
 
     public void fechaSessao() {
@@ -190,8 +295,9 @@ public class Imoobiliaria {
 
     //Registar um utilizador, quer vendedor, quer comprador
     public void registarUtilizador(Utilizador user) throws UtilizadorExistenteException {
-        if (verificaUtilizador(user)) {
-            users.add(user);
+
+        if (user != null && !(users.containsKey(user.getEmail()))) {
+            users.put(user.getEmail(), user);
 
         } else {
             throw new UtilizadorExistenteException("Este utilizador já existe");
@@ -200,13 +306,6 @@ public class Imoobiliaria {
 
     }
 
-    public boolean verificaUtilizador(Utilizador user) {
-        if (user == null) {
-            return false;
-        }
-        // TODO: Aqui provavelmente é melhor simplesmente verificar se existe algum user com email igual.
-        return users.contains(user);
-    }
 
     //Vendedores(é necessário estarem previamente autenticados)
     //Colocar um imóvel à venda;
@@ -252,14 +351,22 @@ public class Imoobiliaria {
 
     public boolean mesmoTipoImovel(String s, Imovel i){
         switch(s){
-            case "Terreno" : if( i instanceof Terreno) return true;
-                            break;
-            case "Moradia" : if( i instanceof Moradia) return true;
-                            break;
-            case "Apartamento" : if( i instanceof Apartamento) return true;
-                                break;
-            case "Loja" : if( i instanceof Loja) return true;
-                        break;
+            case "Terreno":
+                if (i instanceof Terreno)
+                    return true;
+                break;
+            case "Moradia":
+                if (i instanceof Moradia)
+                    return true;
+                break;
+            case "Apartamento":
+                if (i instanceof Apartamento)
+                    return true;
+                break;
+            case "Loja":
+                if (i instanceof Loja)
+                    return true;
+                break;
         }
         return false;
     }
@@ -287,5 +394,22 @@ public class Imoobiliaria {
     public TreeSet<Imovel> getFavoritos() throws SemAutorizacaoException {
         return null;
     }
+
+    public boolean loggedAsBuyer() {
+        if (loggedUser != null) {
+            return (loggedUser instanceof Vendedor);
+        }
+
+        return false;
+    }
+
+    public boolean loggedAsSeller() {
+        if (loggedUser != null) {
+            return (loggedUser instanceof Comprador);
+        }
+
+        return false;
+    }
+
 }
 

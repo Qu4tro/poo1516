@@ -39,7 +39,7 @@ public class Menu {
         return params;
     }
 
-    public int presentChoices() {
+    public void presentChoices() {
 
         clearScreen();
 
@@ -49,13 +49,13 @@ public class Menu {
             i++;
         }
 
-        System.out.print("Escolha a sua opção: ");
-        return getChoosen();
+
     }
 
 
-    private int getChoosen() {
+    public int getChoosen() {
 
+        System.out.print("Escolha a sua opção: ");
         int choice;
         Scanner scanner = new Scanner(System.in);
 
