@@ -6,6 +6,9 @@
  * @version (número de versão ou data)
  */
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Consulta
 {
     private GregorianCalendar data;
@@ -14,16 +17,19 @@ public class Consulta
     public Consulta(){
         data = new GregorianCalendar();
         email = "";
+
     }
     
     public Consulta(GregorianCalendar data, String email){
         this.data = data;
         this.email = email;
+
     }
     
     public Consulta(Consulta c){
         this.data = c.getData();
         this.email = c.getEmail();
+
     }
     
     public GregorianCalendar getData(){
@@ -33,7 +39,8 @@ public class Consulta
     public String getEmail(){
         return email;
     }
-    
+
+
     public Consulta clone(){
         return new Consulta(this);
     }
@@ -52,6 +59,7 @@ public class Consulta
     public String toString(){
         StringBuilder s = new StringBuilder();
         s.append("Data: " + data);
+        s.append("\t");
         s.append("Email: " + email);
         return s.toString();
     }

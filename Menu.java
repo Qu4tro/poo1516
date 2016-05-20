@@ -8,6 +8,11 @@ public class Menu {
         choices = new ArrayList<String>();
     }
 
+    public static void messageUser(String msg) {
+        System.out.println(msg);
+        new Scanner(System.in).nextLine();
+    }
+
     private void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();

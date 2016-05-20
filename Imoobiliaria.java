@@ -1,5 +1,7 @@
 
 
+import sun.reflect.generics.tree.Tree;
+
 import java.io.*;
 import java.util.*;
 import java.lang.String;
@@ -10,7 +12,6 @@ import java.util.function.Supplier;
 public class Imoobiliaria implements Serializable {
 
     private Map<String, Imovel> imoveis;
-    private Map<String, Integer> n_consultas;
     private Set<Consulta> consultas;
 
     private Map<String, Utilizador> users;
@@ -76,8 +77,7 @@ public class Imoobiliaria implements Serializable {
                 try {
                     imobiliaria.iniciaSessao(params.get(0), params.get(1));
                 } catch (SemAutorizacaoException e) {
-                    System.out.println("Login incorrecto!");
-                    new Scanner(System.in).nextLine();
+                    Menu.messageUser("Login incorrecto!");
                     initial_menu(imobiliaria);
                     return;
                 }
@@ -101,8 +101,7 @@ public class Imoobiliaria implements Serializable {
                     }
                     imobiliaria.registarUtilizador(user);
                 } catch (UtilizadorExistenteException e) {
-                    System.out.println("Utilizador já existente!");
-                    new Scanner(System.in).nextLine();
+                    Menu.messageUser("Utilizador já existente!");
                 }
                 initial_menu(imobiliaria);
                 break;
@@ -270,7 +269,7 @@ public class Imoobiliaria implements Serializable {
                 mudarEstadoImovelUI(imobiliaria);
                 break;
             case 5:
-                topVisitasUI(imobiliaria);
+                //topVisitasUI(imobiliaria);
                 break;
             case 6:
                 aVendaUI(imobiliaria);
@@ -321,7 +320,7 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            //TODO ImovelUI
+            imovelUI(imobiliaria);
         }
 
 
@@ -342,7 +341,7 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            //TODO ImovelUI
+            imovelUI(imobiliaria);
         }
     }
 
@@ -361,33 +360,115 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            //TODO ImovelUI
+            imovelUI(imobiliaria);
         }
     }
 
     public static void favoritosUI(Imoobiliaria imobiliaria) {
-        //TODO TreeSet<Imovel> getFavoritos()
+        TreeSet<Imovel> favs;
+        try {
+            favs = imobiliaria.getFavoritos();
+        } catch (SemAutorizacaoException e) {
+            return;
+        }
+        Menu m = new Menu();
+        favs.stream().forEach(i -> m.addField(i.shortLine()));
+        m.addField("Sair");
+
+        int choice = m.presentChoices(15);
+        if (choice == 0) {
+            initial_menu(imobiliaria);
+        } else {
+            imovelUI(imobiliaria);
+        }
+
     }
 
     public static void aVendaUI(Imoobiliaria imobiliaria) {
-        //TODO List<Consulta> getConsultas() throws SemAutorizacaoException
+        List<Consulta> consultas;
+        try {
+            consultas = imobiliaria.getConsultas();
+        } catch (SemAutorizacaoException e) {
+            return;
+        }
+
+        Menu m = new Menu();
+        consultas.stream().forEach(i -> m.addField(i.toString()));
+        m.addField("Sair");
+
+        int choice = m.presentChoices(15);
+        if (choice == 0) {
+            initial_menu(imobiliaria);
+        } else {
+            imovelUI(imobiliaria);
+        }
     }
 
+    /*
     public static void topVisitasUI(Imoobiliaria imobiliaria) {
         //TODO Set<String> getTopImoveis(int n)
+        Menu m = new Menu();
+        m.addField("Number of entries");
+        int n = Integer.parseInt(m.getParams().get(0));
+
+        Set<String> topImoveis = imobiliaria.getTopImoveis(n);
+
+        Menu n = new Menu();
+        topImoveis.stream().map().forEach(i -> n.addField(i));
+        n.addField("Sair");
+
+        int choice = n.presentChoices(15);
+        if (choice == 0) {
+            initial_menu(imobiliaria);
+        } else {
+            imovelUI(imobiliaria);
+        }
+
     }
+    */
 
     public static void novoImovelUI(Imoobiliaria imobiliaria) {
         // TODO void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException
+        Menu m = new Menu();
+        m.addField("");
     }
 
     public static void mudarEstadoImovelUI(Imoobiliaria imobiliaria) {
-        // TODO void setEstado(String idImovel, String estado) throws ImovelInexistenteException
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Id do imóvel:");
+        String idImovel = scanner.nextLine();
+
+        Menu m = new Menu();
+        m.addField("Por vender");
+        m.addField("Vendido");
+        m.addField("Sair");
+
+        int choice = m.presentChoices();
+
+        if (choice != 0) {
+            try {
+                if (choice == 1) {
+                    imobiliaria.setEstado(idImovel, "Livre");
+                } else if (choice == 2) {
+                    imobiliaria.setEstado(idImovel, "Vendido");
+                }
+
+            } catch (ImovelInexistenteException e) {
+                Menu.messageUser("Imóvel não existente!");
+            } catch (SemAutorizacaoException e) {
+                Menu.messageUser("Utilizador tem de ser vendedor!");
+            } catch (EstadoInvalidoException e) {
+                Menu.messageUser("Estado não é válido!");
+            }
+
+        } else {
+            initial_menu(imobiliaria);
+        }
 
     }
 
-    public static void ImovelUI(Imoobiliaria imobiliaria) {
-        //TODO
+    public static void imovelUI(Imoobiliaria imobiliaria) {
+
     }
 
 
@@ -397,8 +478,6 @@ public class Imoobiliaria implements Serializable {
         users = new HashMap<>();
 
         loggedUser = null;
-
-        n_consultas = new HashMap<>();
         consultas = new TreeSet<>(new ComparatorData());
     }
 
@@ -500,12 +579,11 @@ public class Imoobiliaria implements Serializable {
 
     //Obter um conjunto com os códigos dos imóveis mais consultados(ou seja, com mais de N consultas).
     //refere-se aos imóveis do vendedor que está a fazer a consulta
-    //TODO is clearly wrong
     public Set<String> getTopImoveis(int n) {
 
         Set<Map.Entry<String, Integer>> sortedEntries = new TreeSet<>(new ComparatorCounter());
-        sortedEntries.addAll(n_consultas.entrySet());
 
+        sortedEntries.addAll(loggedUser.getNConsultas().entrySet());
         return sortedEntries.stream()
                 .limit(n)
                 .map(i -> i.getKey())

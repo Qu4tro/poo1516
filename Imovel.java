@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Escreva a descrição da classe Imóveis aqui.
@@ -69,6 +71,7 @@ public abstract class Imovel extends Imoobiliaria {
     public EstadoImovel getEstado() {
         return estado;
     }
+
 
     public void setEstado(EstadoImovel estado) {
         this.estado = estado;
