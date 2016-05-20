@@ -29,14 +29,14 @@ public class Imoobiliaria implements Serializable {
 
     public static Imoobiliaria initApp() {
         try {
-            load("ficheiro.app");
+            return load("ficheiro.app");
         } catch (IOException e) {
             System.out.println("Couldn't read file. Using empty one");
         } catch (ClassNotFoundException e) {
             System.exit(1);
         }
         return new Imoobiliaria();
-        //LOAD /SAVE TODO
+        //LOAD //SAVE TODO
     }
 
     public void save(String file) throws IOException {
@@ -269,7 +269,7 @@ public class Imoobiliaria implements Serializable {
                 mudarEstadoImovelUI(imobiliaria);
                 break;
             case 5:
-                //topVisitasUI(imobiliaria);
+                topVisitasUI(imobiliaria);
                 break;
             case 6:
                 aVendaUI(imobiliaria);
