@@ -53,6 +53,12 @@ public class Vendedor extends Utilizador {
         this.nConsultas = nConsultas;
     }
 
+    public void consult(String idImovel) {
+        if (nConsultas.containsKey(idImovel)) {
+            nConsultas.put(idImovel, nConsultas.get(idImovel) + 1);
+        }
+        nConsultas.put(idImovel, 1);
+    }
 
     public void setImoveis(ArrayList<Imovel> imoveisVendidos) {
         this.imoveis.clear();

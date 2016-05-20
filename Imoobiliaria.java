@@ -429,7 +429,8 @@ public class Imoobiliaria implements Serializable {
     public static void novoImovelUI(Imoobiliaria imobiliaria) {
         // TODO void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException
         Menu m = new Menu();
-        m.addField("");
+        m.addField("Registar um imovel");
+
     }
 
     public static void mudarEstadoImovelUI(Imoobiliaria imobiliaria) {
@@ -478,6 +479,19 @@ public class Imoobiliaria implements Serializable {
 
         loggedUser = null;
         consultas = new TreeSet<>(new ComparatorData());
+    }
+
+    public void consultar(Imovel i) {
+        Consulta c = new Consulta(new GregorianCalendar(), loggedUser.getEmail());
+        consultas.add(c);
+        i.getVendedor().consult(i.getId());
+    }
+
+    public void consultar(Habitavel i) {
+        Consulta c = new Consulta(new GregorianCalendar(), loggedUser.getEmail());
+        consultas.add(c);
+        Imovel im = (Imovel) i;
+        im.getVendedor().consult(im.getId());
     }
 
     //Validar o acesso à aplicação utilizando as credenciais(email e password)
@@ -532,7 +546,7 @@ public class Imoobiliaria implements Serializable {
 
     //Visualizar uma lista com as datas( e emails, caso exista essa informação) das 10 últimas consultas
     //aos imóveis que tem para venda
-    //são geradas pelo métodos getImovel(String,Int),getHbitaveis(int),getMapearmentoImoveis() e getFavoritos()
+    //são geradas pelo métodos .getImovel(String,Int),.getHbitaveis(int),getMapearmentoImoveis() e getFavoritos()
     public List<Consulta> getConsultas() throws SemAutorizacaoException {
         if (loggedAsSeller()) {
             return consultas.stream()
@@ -591,11 +605,15 @@ public class Imoobiliaria implements Serializable {
     }
 
     public List<Imovel> getImovel(String classe, int preco) {
-        return imoveis.values()
+        List<Imovel> ims = imoveis.values()
                 .stream()
-                      .filter(i -> mesmoTipoImovel(classe, i))
-                      .filter(i -> i.getPrecoPedido() < preco)
-                      .collect(Collectors.toList());
+                .filter(i -> mesmoTipoImovel(classe, i))
+                .filter(i -> i.getPrecoPedido() < preco)
+                .collect(Collectors.toList());
+
+        ims.stream().forEach(i -> consultar(i));
+
+        return ims;
     }
 
     public boolean mesmoTipoImovel(String s, Imovel i){
@@ -623,12 +641,16 @@ public class Imoobiliaria implements Serializable {
 
     //Consultar a lista de todos os imóveis habitáveis(até um certo preço)
     public List<Habitavel> getHabitaveis(int preco) {
-        return imoveis.values()
+        List<Habitavel> habs = imoveis.values()
                 .stream()
                 .filter(i -> eHabitavel(i) != null)
                 .filter(i -> i.getPrecoPedido() < preco)
                 .map(i -> eHabitavel(i))
                 .collect(Collectors.toList());
+
+        habs.stream().forEach(i -> consultar(i));
+
+        return habs;
     }
 
 
@@ -650,6 +672,9 @@ public class Imoobiliaria implements Serializable {
 
     //Obter um mapeamento entre todos os imóveis e respetivos vendedores.
     public Map<Imovel, Vendedor> getMapeamentoImoveis() {
+
+        imoveis.values().stream().forEach(i -> consultar(i));
+
         return imoveis.values().stream()
                 .collect(Collectors.toMap(e -> e, e -> e.getVendedor()));
     }
@@ -676,14 +701,18 @@ public class Imoobiliaria implements Serializable {
             Supplier<TreeSet<Imovel>> supplier = () -> new TreeSet<>(new ComparatorPreco());
 
             Comprador c = (Comprador) loggedUser;
-            return c.getFavoritos()
+            TreeSet<Imovel> imvs = c.getFavoritos()
                     .stream()
                     .map(id -> imoveis.get(id))
                     .collect(Collectors.toCollection(supplier));
+
+            imvs.stream().forEach(i -> consultar(i));
+
+            return imvs;
+
         } else {
             throw new SemAutorizacaoException("Não está autenticado como comprador.");
         }
-
     }
 
 
