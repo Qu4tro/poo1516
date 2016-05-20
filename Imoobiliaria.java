@@ -13,6 +13,9 @@ public class Imoobiliaria {
     //private ArrayList<Imovel> imoveis;
     //private ArrayList<Utilizador> users;
     private HashMap<String, Imovel> imoveis;
+    private HashMap<String, Integer> n_consultas;
+    private TreeSet<Consulta> consultas;
+
     private HashMap<String, Utilizador> users;
 
     private Utilizador loggedUser;
@@ -332,7 +335,11 @@ public class Imoobiliaria {
     //aos imóveis que tem para venda
     //são geradas pelo métodos getImovel(String,Int),getHbitaveis(int),getMapearmentoImoveis() e getFavoritos()
     public List<Consulta> getConsultas() throws SemAutorizacaoException {
-        //TODO
+        if (loggedAsSeller()) {
+
+        } else {
+            throw new SemAutorizacaoException("Não está autenticado como vendedor!");
+        }
         return null;
     }
     
@@ -352,7 +359,7 @@ public class Imoobiliaria {
                 throw new ImovelInexistenteException("Imovel não registado.");
             }
         } else {
-            throw new SemAutorizacaoException("Não está autenticado como comprador.");
+            throw new SemAutorizacaoException("Não está autenticado como vendedor!");
         }
 
     }
