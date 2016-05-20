@@ -29,6 +29,7 @@ public abstract class Imovel extends Imoobiliaria {
         precoPedido = 0.0;
         precoMinimo = 0.0;
         vendedor = null;
+
     }
 
     public Imovel(String id, String rua, EstadoImovel estado, double precoP, double precoM, Vendedor vendedor) {
@@ -38,6 +39,7 @@ public abstract class Imovel extends Imoobiliaria {
         this.precoPedido = precoP;
         this.precoMinimo = precoM;
         this.vendedor = vendedor;
+
     }
 
     public Imovel(Imovel i) {
@@ -46,6 +48,7 @@ public abstract class Imovel extends Imoobiliaria {
         estado = i.getEstado();
         precoPedido = i.getPrecoPedido();
         precoMinimo = i.getPrecoMinimo();
+
     }
 
     public String getRua() {
@@ -71,7 +74,6 @@ public abstract class Imovel extends Imoobiliaria {
     public EstadoImovel getEstado() {
         return estado;
     }
-
 
     public void setEstado(EstadoImovel estado) {
         this.estado = estado;

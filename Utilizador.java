@@ -8,7 +8,7 @@ public abstract class Utilizador implements Serializable {
     private String password;
     private String morada;
     private String dataNascimento;
-    private Map<String, Integer> nConsultas;
+
 
     public Utilizador() {
         email = "";
@@ -16,7 +16,7 @@ public abstract class Utilizador implements Serializable {
         password = "";
         morada = "";
         dataNascimento = "";
-        nConsultas = new HashMap<>();
+
     }
 
     public Utilizador(String email, String nom, String pass, String mor, String dataN) {
@@ -25,7 +25,7 @@ public abstract class Utilizador implements Serializable {
         this.password = pass;
         this.morada = mor;
         this.dataNascimento = dataN;
-        nConsultas = new HashMap<>();
+
     }
 
     public Utilizador(Utilizador a) {
@@ -34,7 +34,7 @@ public abstract class Utilizador implements Serializable {
         password = a.getPassword();
         morada = a.getMorada();
         dataNascimento = a.getDataNascimento();
-        nConsultas = a.getNConsultas();
+
     }
 
     public String getEmail() {
@@ -57,13 +57,6 @@ public abstract class Utilizador implements Serializable {
         return dataNascimento;
     }
 
-    public Map<String, Integer> getNConsultas() {
-        return nConsultas;
-    }
-
-    public void setNConsultas(Map<String, Integer> nConsultas) {
-        this.nConsultas = nConsultas;
-    }
 
     public void setEmail(String e) {
         this.email = e;

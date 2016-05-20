@@ -97,7 +97,7 @@ public class Imoobiliaria implements Serializable {
                     if (params.get(0).equals("comprador")) {
                         user = new Comprador(params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), null);
                     } else if (params.get(0).equals("vendedor")) {
-                        user = new Vendedor(params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), null, null);
+                        user = new Vendedor(params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), null);
                     }
                     imobiliaria.registarUtilizador(user);
                 } catch (UtilizadorExistenteException e) {
@@ -404,20 +404,20 @@ public class Imoobiliaria implements Serializable {
         }
     }
 
-    /*
+
     public static void topVisitasUI(Imoobiliaria imobiliaria) {
         //TODO Set<String> getTopImoveis(int n)
         Menu m = new Menu();
-        m.addField("Number of entries");
+        m.addField("Número de entradas");
         int n = Integer.parseInt(m.getParams().get(0));
 
         Set<String> topImoveis = imobiliaria.getTopImoveis(n);
 
-        Menu n = new Menu();
-        topImoveis.stream().map().forEach(i -> n.addField(i));
-        n.addField("Sair");
+        Menu m2 = new Menu();
+        topImoveis.stream().forEach(s -> m2.addField(s));
+        m2.addField("Sair");
 
-        int choice = n.presentChoices(15);
+        int choice = m2.presentChoices(15);
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
@@ -425,7 +425,6 @@ public class Imoobiliaria implements Serializable {
         }
 
     }
-    */
 
     public static void novoImovelUI(Imoobiliaria imobiliaria) {
         // TODO void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException
@@ -583,7 +582,8 @@ public class Imoobiliaria implements Serializable {
 
         Set<Map.Entry<String, Integer>> sortedEntries = new TreeSet<>(new ComparatorCounter());
 
-        sortedEntries.addAll(loggedUser.getNConsultas().entrySet());
+        Vendedor v = (Vendedor) loggedUser;
+        sortedEntries.addAll(v.getNConsultas().entrySet());
         return sortedEntries.stream()
                 .limit(n)
                 .map(i -> i.getKey())
