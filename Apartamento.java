@@ -24,7 +24,9 @@ public class Apartamento extends Imovel implements Habitavel {
         temGaragem = false;
     }
 
-    public Apartamento(String tipo, double areaT, int quar, int wc, int p, int and, boolean temGaragem) {
+    public Apartamento(String id, String rua, EstadoImovel estado, double precoP, double precoM, Vendedor vendedor,
+                       String tipo, double areaT, int quar, int wc, int p, int and, boolean temGaragem) {
+        super(id, rua, estado, precoP, precoM, vendedor);
         this.tipo = tipo;
         this.areaTotal = areaT;
         this.quartos = quar;
@@ -35,6 +37,7 @@ public class Apartamento extends Imovel implements Habitavel {
     }
 
     public Apartamento(Apartamento ap) {
+        super(ap);
         tipo = ap.getTipo();
         areaTotal = ap.getAreaTotal();
         quartos = ap.getQuartos();

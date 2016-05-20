@@ -426,11 +426,67 @@ public class Imoobiliaria implements Serializable {
 
     }
 
-    public static void novoImovelUI(Imoobiliaria imobiliaria) {
+    public static Imovel novoImovelUI(Imoobiliaria imobiliaria) {
         // TODO void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException
+        Imovel imovel;
+        List<String> params;
         Menu m = new Menu();
-        m.addField("Registar um imovel");
+        m.addField("Apartamento");
+        m.addField("Loja");
+        m.addField("Loja Habitável");
+        m.addField("Moradia");
+        m.addField("Terreno");
 
+        m.addField("Voltar");
+
+        int choice = m.presentChoices();
+
+        Menu n = new Menu();
+        n.addField("ID");
+        n.addField("Rua");
+        n.addField("Estado");
+        n.addField("Preço Pedido");
+        n.addField("Preço Minimo");
+
+        switch (choice) {
+            case 1:
+                n.addField("Tipo");
+                n.addField("Área Total");
+                n.addField("Quartos");
+                n.addField("WC");
+                n.addField("Porta");
+                n.addField("Andar");
+                n.addField("Tem Garagem");
+                params = n.getParams();
+                imovel = new Apartamento();
+                break;
+            case 2:
+                imovel = new Loja();
+                break;
+            case 3:
+                imovel = new LojaHabitavel();
+                break;
+            case 4:
+                imovel = new Moradia();
+                break;
+            case 5:
+                imovel = new Terreno();
+                break;
+            case 0:
+                //TODO BAZA
+                break;
+        }
+
+        return null;
+    }
+
+    public Apartamento paramsToApartamento(List<String> params) {
+        EstadoImovel estado = string2Estado(params.get(3));
+        double precoP = Double.parseDouble(params.get(4));
+        double precoM = Double.parseDouble(params.get(5));
+
+
+        return null;
     }
 
     public static void mudarEstadoImovelUI(Imoobiliaria imobiliaria) {
@@ -676,7 +732,8 @@ public class Imoobiliaria implements Serializable {
         imoveis.values().stream().forEach(i -> consultar(i));
 
         return imoveis.values().stream()
-                .collect(Collectors.toMap(e -> e, e -> e.getVendedor()));
+                .collect(Collectors.toMap(e -> e,
+                        e -> e.getVendedor()));
     }
 
     //Compradores registados:

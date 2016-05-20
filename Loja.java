@@ -18,7 +18,9 @@ public class Loja extends Imovel {
         porta = 0;
     }
 
-    public Loja(double area, boolean wc, String tipo, int porta) {
+    public Loja(String id, String rua, EstadoImovel estado, double precoP, double precoM, Vendedor vendedor,
+                double area, boolean wc, String tipo, int porta) {
+        super(id, rua, estado, precoP, precoM, vendedor);
         this.area = area;
         this.temWC = wc;
         this.tipoNegocio = tipo;
@@ -26,6 +28,7 @@ public class Loja extends Imovel {
     }
 
     public Loja(Loja l) {
+        super(l);
         area = l.getArea();
         temWC = l.getTemWC();
         tipoNegocio = l.getTipoNegocio();

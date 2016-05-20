@@ -26,11 +26,6 @@ public class Vendedor extends Utilizador {
         nConsultas = new HashMap<>();
     }
 
-    public Vendedor(Utilizador vendedor) {
-        //this(vendedor.getEmail(), vendedor.getNome(),
-          //      vendedor.getPassword(), vendedor.getMorada(), vendedor.getDataNascimento());
-    }
-
     public Vendedor(Vendedor vend){
         super(vend);
         setImoveis(vend.getImoveis());

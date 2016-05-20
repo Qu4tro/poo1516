@@ -19,14 +19,17 @@ public class LojaHabitavel extends Loja implements Habitavel
         temGaragem = false;
     }
 
-    public LojaHabitavel(String tipo, int quar, int and, boolean temGaragem) {
-        this.tipo = tipo;
+    public LojaHabitavel(String id, String rua, EstadoImovel estado, double precoP, double precoM, Vendedor vendedor,
+                         double area, boolean wc, String tipo, int porta,
+                         int quar, int and, boolean temGaragem) {
+        super(id, rua, estado, precoP, precoM, vendedor, area, wc, tipo, porta);
         this.quartos = quar;
         this.andar = and;
         this.temGaragem = temGaragem;
     }
 
     public LojaHabitavel(LojaHabitavel lh) {
+        super(lh);
         tipo = lh.getTipo();
         quartos = lh.getQuartos();
         andar = lh.getAndar();

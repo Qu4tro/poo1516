@@ -20,12 +20,13 @@ public class Terreno extends Imovel {
         id = "";
     }
 
-    public Terreno(double a, double d, double k, boolean c, String id) {
+    public Terreno(String id, String rua, EstadoImovel estado, double precoP, double precoM, Vendedor vendedor,
+                   double a, double d, double k, boolean c) {
+        super(id, rua, estado, precoP, precoM, vendedor);
         this.area = a;
         this.diamCanalizacoes = d;
         this.kWh = k;
         this.temAcesso = c;
-        this.id = id;
     }
 
     public Terreno(Terreno a) {
@@ -51,10 +52,6 @@ public class Terreno extends Imovel {
     public boolean getAcess() {
         return temAcesso;
     }
-    
-    public String getId(){
-        return id;
-    }
 
     public void setArea(double d) {
         this.area = d;
@@ -71,11 +68,6 @@ public class Terreno extends Imovel {
     public void setAcess(boolean t) {
         this.temAcesso = t;
     }
-    
-    public void setId(String id){
-        this.id = id;
-    }
-
 
     public Terreno clone() {
         return new Terreno(this);
