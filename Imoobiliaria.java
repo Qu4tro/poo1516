@@ -245,12 +245,12 @@ public class Imoobiliaria {
 
     public static void listarUI(Imoobiliaria imobiliaria) {
         Menu m = new Menu();
-//TODO
+        //TODO
 
     }
 
     public static void contactosUI(Imoobiliaria imobiliaria) {
-//TODO
+        //TODO
     }
 
     public static void habitaveisUI(Imoobiliaria imobiliaria) {
@@ -340,8 +340,34 @@ public class Imoobiliaria {
     public void setEstado(String idImovel, String estado) throws ImovelInexistenteException,
             SemAutorizacaoException,
             EstadoInvalidoException {
-        // TODO
+        if (loggedAsSeller()) {
+            if (imoveis.containsKey(idImovel)) {
+                Imovel i = imoveis.get(idImovel);
+                EstadoImovel ei = string2Estado(estado);
+                if (ei == null) {
+                    throw new EstadoInvalidoException("Estado não é válido");
+                }
+                i.setEstado(ei);
+            } else {
+                throw new ImovelInexistenteException("Imovel não registado.");
+            }
+        } else {
+            throw new SemAutorizacaoException("Não está autenticado como comprador.");
+        }
+
     }
+
+    public EstadoImovel string2Estado(String estado) {
+        if (estado.equals("Livre")) {
+            return EstadoImovel.LIVRE;
+        } else if (estado.equals("Vendido")) {
+            return EstadoImovel.VENDIDO;
+        } else {
+            return null;
+        }
+    }
+
+
 
     //Obter um conjunto com os códigos dos imóveis mais consultados(ou seja, com mais de N consultas).
     //refere-se aos imóveis do vendedor que está a fazer a consulta
@@ -350,7 +376,8 @@ public class Imoobiliaria {
     }
 
     public List<Imovel> getImovel(String classe, int preco) {
-        return imoveis.values().stream()
+        return imoveis.values()
+                .stream()
                       .filter(i -> mesmoTipoImovel(classe, i))
                       .filter(i -> i.getPrecoPedido() < preco)
                       .collect(Collectors.toList());
@@ -380,12 +407,31 @@ public class Imoobiliaria {
     
 
     //Consultar a lista de todos os imóveis habitáveis(até um certo preço)
-    /* // TODO
     public List<Habitavel> getHabitaveis(int preco) {
-        ArrayList<Habitavel> l = new ArrayList<Habitavel>();
-        return l.stream().filter(i -> imoveisHabitaveis(i))
+        return imoveis.values()
+                .stream()
+                .filter(i -> eHabitavel(i) != null)
+                .filter(i -> i.getPrecoPedido() < preco)
+                .map(i -> eHabitavel(i))
+                .collect(Collectors.toList());
     }
-    */
+
+
+    public Habitavel eHabitavel(Imovel i) {
+
+        if (i instanceof LojaHabitavel) {
+            LojaHabitavel lh = (LojaHabitavel) i;
+            return lh;
+        } else if (i instanceof Apartamento) {
+            Apartamento ap = (Apartamento) i;
+            return ap;
+        } else if (i instanceof Moradia) {
+            Moradia mor = (Moradia) i;
+            return mor;
+        } else {
+            return null;
+        }
+    }
 
     //Obter um mapeamento entre todos os imóveis e respetivos vendedores.
     public Map<Imovel, Vendedor> getMapeamentoImoveis() {
@@ -412,7 +458,6 @@ public class Imoobiliaria {
     public TreeSet<Imovel> getFavoritos() throws SemAutorizacaoException {
 
         if (loggedAsBuyer()) {
-
             Supplier<TreeSet<Imovel>> supplier = () -> new TreeSet<>(new ComparatorPreco());
 
             Comprador c = (Comprador) loggedUser;
@@ -421,10 +466,11 @@ public class Imoobiliaria {
                     .map(id -> imoveis.get(id))
                     .collect(Collectors.toCollection(supplier));
         } else {
-            throw new SemAutorizacaoException("");
+            throw new SemAutorizacaoException("Não está autenticado como comprador.");
         }
 
     }
+
 
     public boolean loggedAsBuyer() {
         if (loggedUser != null) {

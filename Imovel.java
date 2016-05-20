@@ -5,25 +5,35 @@
  * @author (seu nome) 
  * @version (número de versão ou data)
  */
+
+enum EstadoImovel {
+    LIVRE,
+    VENDIDO
+}
+
 public abstract class Imovel extends Imoobiliaria {
 
     private String id;
     private String rua;
+    private EstadoImovel estado;
     private double precoPedido;
     private double precoMinimo;
     private Vendedor vendedor;
 
+
     public Imovel() {
         id = "";
         rua = "";
+        estado = EstadoImovel.VENDIDO;
         precoPedido = 0.0;
         precoMinimo = 0.0;
         vendedor = null;
     }
 
-    public Imovel(String id, String rua, double precoP, double precoM, Vendedor vendedor) {
+    public Imovel(String id, String rua, EstadoImovel estado, double precoP, double precoM, Vendedor vendedor) {
         this.id = id;
         this.rua = rua;
+        this.estado = estado;
         this.precoPedido = precoP;
         this.precoMinimo = precoM;
         this.vendedor = vendedor;
@@ -32,9 +42,9 @@ public abstract class Imovel extends Imoobiliaria {
     public Imovel(Imovel i) {
         id = i.getId();
         rua = i.getRua();
+        estado = i.getEstado();
         precoPedido = i.getPrecoPedido();
         precoMinimo = i.getPrecoMinimo();
-
     }
 
     public String getRua() {
@@ -55,6 +65,14 @@ public abstract class Imovel extends Imoobiliaria {
 
     public Vendedor getVendedor() {
         return vendedor.clone();
+    }
+
+    public EstadoImovel getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoImovel estado) {
+        this.estado = estado;
     }
 
     public void setRua(String rua) {
@@ -87,8 +105,9 @@ public abstract class Imovel extends Imoobiliaria {
             return false;
         }
         Imovel im = (Imovel) o;
-        return im.getRua().equals(rua) && im.getPrecoPedido() == precoPedido &&
-                im.getPrecoMinimo() == precoMinimo && im.getId() == id && vendedor.equals(im.getVendedor());
+        return im.getId().equals(id) && im.getRua().equals(rua) && im.getEstado().equals(estado)
+                && getPrecoPedido() == precoPedido && im.getPrecoMinimo() == precoMinimo
+                && vendedor.equals(im.getVendedor());
     }
 
     public String toString() {
@@ -99,6 +118,8 @@ public abstract class Imovel extends Imoobiliaria {
         s.append(id);
         s.append("Rua: ");
         s.append(rua);
+        s.append("Estado: ");
+        s.append(estado);
         s.append("\nPreço Pedido: ");
         s.append(precoPedido);
         s.append("\nPreço Minimo: ");
