@@ -110,21 +110,36 @@ public abstract class Imovel extends Imoobiliaria {
                 && vendedor.equals(im.getVendedor());
     }
 
+    public String shortLine() {
+        StringBuilder s;
+
+        s = new StringBuilder();
+        s.append(id);
+        s.append(" - ");
+        s.append(this.getClass().getSimpleName());
+        s.append(" - ");
+        s.append(rua);
+        s.append(" - ");
+        s.append(precoPedido);
+
+        return s.toString();
+    }
+
     public String toString() {
         StringBuilder s;
 
         s = new StringBuilder();
         s.append("ID: ");
         s.append(id);
-        s.append("Rua: ");
+        s.append("\nRua: ");
         s.append(rua);
-        s.append("Estado: ");
+        s.append("\nEstado: ");
         s.append(estado);
         s.append("\nPreço Pedido: ");
         s.append(precoPedido);
         s.append("\nPreço Minimo: ");
         s.append(precoMinimo);
-        s.append("\nVendedor: ");
+        s.append("\n\nVendedor: ");
         s.append(vendedor.getEmail());
         return s.toString();
     }

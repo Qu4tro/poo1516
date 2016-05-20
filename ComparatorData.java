@@ -8,6 +8,7 @@
 import java.util.Comparator;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
+
 public class ComparatorData implements Comparator<Consulta>, Serializable
 {
     public int compare(Consulta c1, Consulta c2){

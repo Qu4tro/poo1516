@@ -12,11 +12,11 @@ public class Imoobiliaria {
 
     //private ArrayList<Imovel> imoveis;
     //private ArrayList<Utilizador> users;
-    private HashMap<String, Imovel> imoveis;
-    private HashMap<String, Integer> n_consultas;
-    private TreeSet<Consulta> consultas;
+    private Map<String, Imovel> imoveis;
+    private Map<String, Integer> n_consultas;
+    private Set<Consulta> consultas;
 
-    private HashMap<String, Utilizador> users;
+    private Map<String, Utilizador> users;
 
     private Utilizador loggedUser;
 
@@ -247,17 +247,82 @@ public class Imoobiliaria {
 
 
     public static void listarUI(Imoobiliaria imobiliaria) {
+
+        int choice;
+        Scanner scanner = new Scanner(System.in);
         Menu m = new Menu();
-        //TODO
+        Menu n = new Menu();
+        String tipos[] = {"Apartamento", "Loja", "Moradia", "Terreno"};
+        String tipo;
+
+        m.addField("Apartamento");
+        m.addField("Loja");
+        m.addField("Moradia");
+        m.addField("Terreno");
+        m.addField("Voltar");
+
+        choice = m.presentChoices();
+        if (choice == 0) {
+            initial_menu(imobiliaria);
+            return;
+        } else {
+            tipo = tipos[choice - 1];
+        }
+
+        System.out.println("Preço máximo: ");
+        int precoMaximo = scanner.nextInt();
+
+        List<Imovel> imoveis = imobiliaria.getImovel(tipo, precoMaximo);
+
+        imoveis.stream().forEach(i -> n.addField(i.shortLine()));
+        n.addField("Sair");
+
+        choice = m.presentChoices(15);
+        if (choice == 0) {
+            initial_menu(imobiliaria);
+        } else {
+            //TODO ImovelUI
+        }
+
+
 
     }
 
     public static void contactosUI(Imoobiliaria imobiliaria) {
-        //TODO
+        Menu m = new Menu();
+        Map<Imovel, Vendedor> contactos = imobiliaria.getMapeamentoImoveis();
+        Set<Map.Entry<Imovel, Vendedor>> entries = contactos.entrySet();
+
+        entries.stream()
+                .forEach(entry -> m.addField(entry.getKey().getId() + " - " + entry.getValue().getEmail()));
+
+        m.addField("Sair");
+
+        int choice = m.presentChoices(15);
+        if (choice == 0) {
+            initial_menu(imobiliaria);
+        } else {
+            //TODO ImovelUI
+        }
     }
 
     public static void habitaveisUI(Imoobiliaria imobiliaria) {
-        //TODO fhikjik
+        //TODO public List<Habitavel> getHabitaveis(int preco)
+        Menu m = new Menu();
+        m.addField("Price");
+        int price = Integer.parseInt(m.getParams().get(0));
+        List<Habitavel> habitaveis = imobiliaria.getHabitaveis(price);
+
+        Menu n = new Menu();
+        habitaveis.stream().map(h -> (Imovel) h).forEach(i -> n.addField(i.shortLine()));
+        n.addField("Sair");
+
+        int choice = n.presentChoices(15);
+        if (choice == 0) {
+            initial_menu(imobiliaria);
+        } else {
+            //TODO ImovelUI
+        }
     }
 
     public static void favoritosUI(Imoobiliaria imobiliaria) {
@@ -278,6 +343,9 @@ public class Imoobiliaria {
         users = new HashMap<>();
 
         loggedUser = null;
+
+        n_consultas = new HashMap<>();
+        consultas = new TreeSet<>(new ComparatorData());
     }
 
     //Validar o acesso à aplicação utilizando as credenciais(email e password)
@@ -330,17 +398,17 @@ public class Imoobiliaria {
     }
 
 
-    
     //Visualizar uma lista com as datas( e emails, caso exista essa informação) das 10 últimas consultas
     //aos imóveis que tem para venda
     //são geradas pelo métodos getImovel(String,Int),getHbitaveis(int),getMapearmentoImoveis() e getFavoritos()
     public List<Consulta> getConsultas() throws SemAutorizacaoException {
         if (loggedAsSeller()) {
-
+            return consultas.stream()
+                    .limit(10)
+                    .collect(Collectors.toList());
         } else {
             throw new SemAutorizacaoException("Não está autenticado como vendedor!");
         }
-        return null;
     }
     
     //Alterar o estado de um imóvel, de acordo com as acções feitas sobre ele;
@@ -379,7 +447,13 @@ public class Imoobiliaria {
     //Obter um conjunto com os códigos dos imóveis mais consultados(ou seja, com mais de N consultas).
     //refere-se aos imóveis do vendedor que está a fazer a consulta
     public Set<String> getTopImoveis(int n) {
-        return null; // TODO
+        Set<Map.Entry<String, Integer>> sortedEntries = new TreeSet<>(new ComparatorCounter());
+        sortedEntries.addAll(n_consultas.entrySet());
+
+        return sortedEntries.stream()
+                .limit(n)
+                .map(i -> i.getKey())
+                .collect(Collectors.toSet());
     }
 
     public List<Imovel> getImovel(String classe, int preco) {
