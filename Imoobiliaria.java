@@ -320,7 +320,7 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            imovelUI(imobiliaria);
+            imovelUI(imoveis.get(choice));
         }
 
 
@@ -341,12 +341,12 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            imovelUI(imobiliaria);
+            Imovel im = entries.stream().map(i -> i.getKey()).collect(Collectors.toList()).get(choice);
+            imovelUI(im);
         }
     }
 
     public static void habitaveisUI(Imoobiliaria imobiliaria) {
-        //TODO public List<Habitavel> getHabitaveis(int preco)
         Menu m = new Menu();
         m.addField("Price");
         int price = Integer.parseInt(m.getParams().get(0));
@@ -360,7 +360,7 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            imovelUI(imobiliaria);
+            imovelUI((Imovel) habitaveis.get(choice));
         }
     }
 
@@ -379,7 +379,8 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            imovelUI(imobiliaria);
+            Imovel im = favs.stream().collect(Collectors.toList()).get(choice);
+            imovelUI(im);
         }
 
     }
@@ -398,15 +399,13 @@ public class Imoobiliaria implements Serializable {
 
         int choice = m.presentChoices(15);
         if (choice == 0) {
-            initial_menu(imobiliaria);
+            sellerMenu(imobiliaria);
         } else {
-            imovelUI(imobiliaria);
+            ;
         }
     }
 
-
     public static void topVisitasUI(Imoobiliaria imobiliaria) {
-        //TODO Set<String> getTopImoveis(int n)
         Menu m = new Menu();
         m.addField("Número de entradas");
         int n = Integer.parseInt(m.getParams().get(0));
@@ -421,15 +420,19 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            imovelUI(imobiliaria);
+            Imovel im = imobiliaria.imoveis.get(topImoveis.stream().collect(Collectors.toList()).get(choice));
+            imovelUI(im);
         }
 
     }
 
-    public static Imovel novoImovelUI(Imoobiliaria imobiliaria) {
-        // TODO void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException
-        Imovel imovel;
+    public static void novoImovelUI(Imoobiliaria imobiliaria) {
+
+        Vendedor v = (Vendedor) imobiliaria.loggedUser;
+        Imovel imovel = null;
+
         List<String> params;
+
         Menu m = new Menu();
         m.addField("Apartamento");
         m.addField("Loja");
@@ -458,35 +461,135 @@ public class Imoobiliaria implements Serializable {
                 n.addField("Andar");
                 n.addField("Tem Garagem");
                 params = n.getParams();
-                imovel = new Apartamento();
+                imovel = paramsToApartamento(params, v);
                 break;
             case 2:
-                imovel = new Loja();
+                n.addField("Tipo");
+                n.addField("Área Total");
+                n.addField("WC");
+                n.addField("Porta");
+                params = n.getParams();
+                imovel = paramsToLoja(params, v);
                 break;
             case 3:
-                imovel = new LojaHabitavel();
+                n.addField("Tipo");
+                n.addField("Área Total");
+                n.addField("Quartos");
+                n.addField("WC");
+                n.addField("Porta");
+                n.addField("Andar");
+                n.addField("Tem Garagem");
+                params = n.getParams();
+                imovel = paramsToLojaHabitavel(params, v);
                 break;
             case 4:
-                imovel = new Moradia();
+                n.addField("Tipo");
+                n.addField("Área Total");
+                n.addField("Área Implementação");
+                n.addField("Área Terreno");
+                n.addField("Quartos");
+                n.addField("WC");
+                n.addField("Porta");
+                params = n.getParams();
+                imovel = paramsToMoradia(params, v);
                 break;
             case 5:
-                imovel = new Terreno();
+                n.addField("Área Total");
+                n.addField("Diâmetro da Canalização");
+                n.addField("Corrente (KwH)");
+                n.addField("Tem acesso");
+                params = n.getParams();
+                imovel = paramsToTerreno(params, v);
                 break;
             case 0:
-                //TODO BAZA
+                sellerMenu(imobiliaria);
                 break;
         }
 
-        return null;
+        if (imovel == null) {
+            Menu.messageUser("Imóvel não foi inserido com sucesso!");
+            sellerMenu(imobiliaria);
+            return;
+        }
+
+        try {
+            imobiliaria.registaImovel(imovel);
+            Menu.messageUser("Imóvel foi inserido com sucesso!");
+        } catch (ImovelExisteException e) {
+            Menu.messageUser("Imóvel já existe!");
+        } catch (SemAutorizacaoException e) {
+            Menu.messageUser("Tem de ser um vendedor!");
+        }
+
     }
 
-    public Apartamento paramsToApartamento(List<String> params) {
+    public static Apartamento paramsToApartamento(List<String> params, Vendedor vendedor) {
         EstadoImovel estado = string2Estado(params.get(3));
         double precoP = Double.parseDouble(params.get(4));
         double precoM = Double.parseDouble(params.get(5));
+        double area = Double.parseDouble(params.get(7));
+        int quartos = Integer.parseInt(params.get(8));
+        int wc = Integer.parseInt(params.get(9));
+        int porta = Integer.parseInt(params.get(10));
+        int andar = Integer.parseInt(params.get(11));
+        boolean garagem = params.get(12).equals("sim");
 
+        return new Apartamento(params.get(0), params.get(1), estado, precoP, precoM, vendedor, params.get(6),
+                area, quartos, wc, porta, andar, garagem);
+    }
 
-        return null;
+    public static Loja paramsToLoja(List<String> params, Vendedor vendedor) {
+        EstadoImovel estado = string2Estado(params.get(3));
+        double precoP = Double.parseDouble(params.get(4));
+        double precoM = Double.parseDouble(params.get(5));
+        double area = Double.parseDouble(params.get(7));
+        boolean wc = params.get(8).equals("sim");
+        int porta = Integer.parseInt(params.get(9));
+
+        return new Loja(params.get(0), params.get(1), estado, precoP, precoM, vendedor, area, wc, params.get(6), porta);
+    }
+
+    public static LojaHabitavel paramsToLojaHabitavel(List<String> params, Vendedor vendedor) {
+        EstadoImovel estado = string2Estado(params.get(3));
+        double precoP = Double.parseDouble(params.get(4));
+        double precoM = Double.parseDouble(params.get(5));
+        double area = Double.parseDouble(params.get(7));
+        int quartos = Integer.parseInt(params.get(8));
+        boolean wc = params.get(9).equals("sim");
+        int porta = Integer.parseInt(params.get(10));
+        int andar = Integer.parseInt(params.get(11));
+        boolean garagem = params.get(12).equals("sim");
+
+        return new LojaHabitavel(params.get(0), params.get(1), estado, precoP, precoM, vendedor, area,
+                wc, params.get(6), porta, quartos, andar, garagem);
+    }
+
+    public static Moradia paramsToMoradia(List<String> params, Vendedor vendedor) {
+        EstadoImovel estado = string2Estado(params.get(3));
+        double precoP = Double.parseDouble(params.get(4));
+        double precoM = Double.parseDouble(params.get(5));
+        double areaI = Double.parseDouble(params.get(7));
+        double areaT = Double.parseDouble(params.get(8));
+        double areaTerr = Double.parseDouble(params.get(9));
+        int quartos = Integer.parseInt(params.get(10));
+        int wc = Integer.parseInt(params.get(11));
+        int porta = Integer.parseInt(params.get(12));
+
+        return new Moradia(params.get(0), params.get(1), estado, precoP, precoM, vendedor, params.get(6),
+                areaI, areaT, areaTerr, quartos, wc, porta);
+    }
+
+    public static Terreno paramsToTerreno(List<String> params, Vendedor vendedor) {
+        EstadoImovel estado = string2Estado(params.get(3));
+        double precoP = Double.parseDouble(params.get(4));
+        double precoM = Double.parseDouble(params.get(5));
+        double area = Double.parseDouble(params.get(6));
+        double dim = Double.parseDouble(params.get(7));
+        double kwh = Double.parseDouble(params.get(8));
+        boolean acesso = params.get(12).equals("sim");
+
+        return new Terreno(params.get(0), params.get(1), estado, precoP, precoM, vendedor,
+                area, dim, kwh, acesso);
     }
 
     public static void mudarEstadoImovelUI(Imoobiliaria imobiliaria) {
@@ -523,8 +626,9 @@ public class Imoobiliaria implements Serializable {
 
     }
 
-    public static void imovelUI(Imoobiliaria imobiliaria) {
-
+    public static void imovelUI(Imovel im) {
+        System.out.println(im);
+        Menu.messageUser("");
     }
 
 
@@ -634,7 +738,7 @@ public class Imoobiliaria implements Serializable {
 
     }
 
-    public EstadoImovel string2Estado(String estado) {
+    public static EstadoImovel string2Estado(String estado) {
         if (estado.equals("Livre")) {
             return EstadoImovel.LIVRE;
         } else if (estado.equals("Vendido")) {
@@ -672,7 +776,7 @@ public class Imoobiliaria implements Serializable {
         return ims;
     }
 
-    public boolean mesmoTipoImovel(String s, Imovel i){
+    public static boolean mesmoTipoImovel(String s, Imovel i) {
         switch(s){
             case "Terreno":
                 if (i instanceof Terreno)
@@ -710,7 +814,7 @@ public class Imoobiliaria implements Serializable {
     }
 
 
-    public Habitavel eHabitavel(Imovel i) {
+    public static Habitavel eHabitavel(Imovel i) {
 
         if (i instanceof LojaHabitavel) {
             LojaHabitavel lh = (LojaHabitavel) i;
