@@ -1,17 +1,14 @@
 
 
-import java.awt.image.ImageObserver;
+import java.io.*;
 import java.util.*;
 import java.lang.String;
 import java.util.stream.Collectors;
 import java.util.function.Supplier;
 
 
+public class Imoobiliaria implements Serializable {
 
-public class Imoobiliaria {
-
-    //private ArrayList<Imovel> imoveis;
-    //private ArrayList<Utilizador> users;
     private Map<String, Imovel> imoveis;
     private Map<String, Integer> n_consultas;
     private Set<Consulta> consultas;
@@ -24,9 +21,38 @@ public class Imoobiliaria {
     // Métodos estáticos
     public static void main(String[] args) {
 
-        Imoobiliaria imobiliaria = new Imoobiliaria();
-
+        Imoobiliaria imobiliaria = initApp();
         initial_menu(imobiliaria);
+
+    }
+
+    public static Imoobiliaria initApp() {
+        try {
+            load("ficheiro.app");
+        } catch (IOException e) {
+            System.out.println("Couldn't read file. Using empty one");
+        } catch (ClassNotFoundException e) {
+            System.exit(1);
+        }
+        return new Imoobiliaria();
+        //LOAD /SAVE TODO
+    }
+
+    public void save(String file) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+        oos.writeObject(this);
+
+        oos.flush();
+        oos.close();
+    }
+
+    public static Imoobiliaria load(String file) throws IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+
+        Imoobiliaria imob = (Imoobiliaria) ois.readObject();
+
+        ois.close();
+        return imob;
     }
 
     public static void initial_menu(Imoobiliaria imobiliaria) {
@@ -86,6 +112,12 @@ public class Imoobiliaria {
                 break;
 
             case 0:
+                try {
+                    imobiliaria.save("ficheiro.app");
+                } catch (IOException e) {
+                    System.out.println("Couldn't save file.");
+                }
+                System.exit(0);
                 break;
 
         }
@@ -215,8 +247,10 @@ public class Imoobiliaria {
 
         m.addField("Consultar imóveis");
         m.addField("Consultar imóveis habitáveis");
-        m.addField("Consultar seus imóveis em venda");
-        m.addField("Consultar vendas passadas");
+        m.addField("Adicionar novo imóvel");
+        m.addField("Mudar estado de imóvel");
+        m.addField("Consultar imóveis mais visitados");
+        m.addField("Últimas consultas aos seus imóveis em venda");
         m.addField("Contactos");
         m.addField("Logout");
 
@@ -230,12 +264,18 @@ public class Imoobiliaria {
                 habitaveisUI(imobiliaria);
                 break;
             case 3:
-                sellerImoveisUI(imobiliaria);
+                novoImovelUI(imobiliaria);
                 break;
             case 4:
-                sellLogUI(imobiliaria);
+                mudarEstadoImovelUI(imobiliaria);
                 break;
             case 5:
+                topVisitasUI(imobiliaria);
+                break;
+            case 6:
+                aVendaUI(imobiliaria);
+                break;
+            case 7:
                 contactosUI(imobiliaria);
                 break;
             case 0:
@@ -326,16 +366,30 @@ public class Imoobiliaria {
     }
 
     public static void favoritosUI(Imoobiliaria imobiliaria) {
+        //TODO TreeSet<Imovel> getFavoritos()
+    }
+
+    public static void aVendaUI(Imoobiliaria imobiliaria) {
+        //TODO List<Consulta> getConsultas() throws SemAutorizacaoException
+    }
+
+    public static void topVisitasUI(Imoobiliaria imobiliaria) {
+        //TODO Set<String> getTopImoveis(int n)
+    }
+
+    public static void novoImovelUI(Imoobiliaria imobiliaria) {
+        // TODO void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException
+    }
+
+    public static void mudarEstadoImovelUI(Imoobiliaria imobiliaria) {
+        // TODO void setEstado(String idImovel, String estado) throws ImovelInexistenteException
+
+    }
+
+    public static void ImovelUI(Imoobiliaria imobiliaria) {
         //TODO
     }
 
-    public static void sellerImoveisUI(Imoobiliaria imobiliaria) {
-        //TODO
-    }
-
-    public static void sellLogUI(Imoobiliaria imobiliaria) {
-        //TODO
-    }
 
     // Métodos de instância
     public Imoobiliaria() {
@@ -387,7 +441,7 @@ public class Imoobiliaria {
     //Vendedores(é necessário estarem previamente autenticados)
     //Colocar um imóvel à venda;
     public void registaImovel(Imovel im) throws ImovelExisteException, SemAutorizacaoException {
-        if (loggedUser instanceof Vendedor && im != null) {
+        if (loggedAsSeller()) {
             if (imoveis.containsKey(im.getId())) {
                 throw new ImovelExisteException("Já existe este imóvel");
             } else imoveis.put(im.getId(), im.clone());
@@ -410,7 +464,7 @@ public class Imoobiliaria {
             throw new SemAutorizacaoException("Não está autenticado como vendedor!");
         }
     }
-    
+
     //Alterar o estado de um imóvel, de acordo com as acções feitas sobre ele;
     public void setEstado(String idImovel, String estado) throws ImovelInexistenteException,
             SemAutorizacaoException,
@@ -446,7 +500,9 @@ public class Imoobiliaria {
 
     //Obter um conjunto com os códigos dos imóveis mais consultados(ou seja, com mais de N consultas).
     //refere-se aos imóveis do vendedor que está a fazer a consulta
+    //TODO is clearly wrong
     public Set<String> getTopImoveis(int n) {
+
         Set<Map.Entry<String, Integer>> sortedEntries = new TreeSet<>(new ComparatorCounter());
         sortedEntries.addAll(n_consultas.entrySet());
 
@@ -485,7 +541,7 @@ public class Imoobiliaria {
         }
         return false;
     }
-    
+
 
     //Consultar a lista de todos os imóveis habitáveis(até um certo preço)
     public List<Habitavel> getHabitaveis(int preco) {

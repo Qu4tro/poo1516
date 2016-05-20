@@ -1,11 +1,6 @@
+import java.io.Serializable;
 
-/**
- * Escreva a descrição da classe Utilizador aqui.
- * 
- * @author (seu nome) 
- * @version (número de versão ou data)
- */
-public class Utilizador {
+public abstract class Utilizador implements Serializable {
     private String email;
     private String nome;
     private String password;
@@ -76,10 +71,7 @@ public class Utilizador {
         this.dataNascimento = data;
     }
 
-    public Utilizador clone(){
-        return new Utilizador(this);
-    }
-    
+    public abstract Utilizador clone();
 
     public boolean equals(Object o) {
         if (o == this) {

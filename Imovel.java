@@ -7,8 +7,7 @@
  */
 
 enum EstadoImovel {
-    LIVRE,
-    VENDIDO
+    LIVRE, VENDIDO;
 }
 
 public abstract class Imovel extends Imoobiliaria {
