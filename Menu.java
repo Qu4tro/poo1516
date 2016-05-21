@@ -13,7 +13,7 @@ public class Menu {
         new Scanner(System.in).nextLine();
     }
 
-    private void clearScreen() {
+    public static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }

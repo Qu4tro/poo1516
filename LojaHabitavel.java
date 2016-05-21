@@ -88,13 +88,14 @@ public class LojaHabitavel extends Loja implements Habitavel
         StringBuilder s;
         s = new StringBuilder();
 
+        s.append(super.toString());
         s.append("Tipo: ");
         s.append(tipo);
-        s.append("Nº de quartos: ");
+        s.append("\nNº de quartos: ");
         s.append(quartos);
-        s.append("Nº do andar: ");
+        s.append("\nNº do andar: ");
         s.append(andar);
-        s.append("Tem garagem: ");
+        s.append("\nTem garagem: ");
         s.append(temGaragem);
         return s.toString();
     }

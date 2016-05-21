@@ -20,9 +20,9 @@ public class Vendedor extends Utilizador {
 
     }
 
-    public Vendedor(String email, String nom, String pass, String mor, String dataN, ArrayList<Imovel> imoveis) {
+    public Vendedor(String email, String nom, String pass, String mor, String dataN) {
         super(email, nom, pass, mor, dataN);
-        this.imoveis = imoveis;
+        this.imoveis = new ArrayList<>();
         nConsultas = new HashMap<>();
     }
 
@@ -32,13 +32,7 @@ public class Vendedor extends Utilizador {
         nConsultas = vend.getNConsultas();
     }
 
-    public ArrayList<Imovel> getImoveis() {
-        ArrayList<Imovel> res = new ArrayList<>();
-        for (Imovel i : imoveis) {
-            res.add(i.clone());
-        }
-        return res;
-    }
+
 
     public Map<String, Integer> getNConsultas() {
         return nConsultas;
@@ -56,10 +50,11 @@ public class Vendedor extends Utilizador {
     }
 
     public void setImoveis(ArrayList<Imovel> imoveisVendidos) {
-        this.imoveis.clear();
-        for (Imovel i : imoveis) {
-            this.imoveis.add(i.clone());
-        }
+        this.imoveis = new ArrayList<>(imoveisVendidos);
+    }
+
+    public ArrayList<Imovel> getImoveis() {
+        return new ArrayList<>(imoveis);
     }
     
     public Vendedor clone(){

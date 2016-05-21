@@ -48,6 +48,7 @@ public abstract class Imovel extends Imoobiliaria {
         estado = i.getEstado();
         precoPedido = i.getPrecoPedido();
         precoMinimo = i.getPrecoMinimo();
+        vendedor = i.getVendedor();
 
     }
 
@@ -68,7 +69,7 @@ public abstract class Imovel extends Imoobiliaria {
     }
 
     public Vendedor getVendedor() {
-        return vendedor.clone();
+        return new Vendedor(vendedor);
     }
 
     public EstadoImovel getEstado() {
@@ -143,8 +144,9 @@ public abstract class Imovel extends Imoobiliaria {
         s.append(precoPedido);
         s.append("\nPreço Minimo: ");
         s.append(precoMinimo);
-        s.append("\n\nVendedor: ");
+        s.append("\nVendedor: ");
         s.append(vendedor.getEmail());
+        s.append("\n");
         return s.toString();
     }
 

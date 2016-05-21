@@ -124,6 +124,7 @@ public class Apartamento extends Imovel implements Habitavel {
         StringBuilder s;
         s = new StringBuilder();
 
+        s.append(super.toString());
         s.append("Tipo: ");
         s.append(tipo);
         s.append("Área Total: ");

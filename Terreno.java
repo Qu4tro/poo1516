@@ -30,11 +30,11 @@ public class Terreno extends Imovel {
     }
 
     public Terreno(Terreno a) {
+        super(a);
         area = a.getArea();
         diamCanalizacoes = a.getDiam();
         kWh = a.getkW();
         temAcesso = a.getAcess();
-        id = a.getId();
     }
 
     public double getArea() {
@@ -87,6 +87,8 @@ public class Terreno extends Imovel {
 
     public String toString() {
         StringBuilder s = new StringBuilder();
+
+        s.append(super.toString());
         s.append("Area: ");
         s.append(area);
         s.append("\nO diametro das canalizações é: ");
@@ -95,8 +97,6 @@ public class Terreno extends Imovel {
         s.append(kWh);
         s.append("\nTem acesso?: ");
         s.append(temAcesso);
-        s.append("\nId : ");
-        s.append(id);
 
         return s.toString();
     }

@@ -84,15 +84,18 @@ public class Loja extends Imovel {
     }
 
     public String toString() {
+
         StringBuilder s;
         s = new StringBuilder();
+
+        s.append(super.toString());
         s.append("Área: ");
         s.append(area);
-        s.append("Tem WC: ");
+        s.append("\nTem WC: ");
         s.append(temWC);
-        s.append("Tipo de negócio viável na loja: ");
+        s.append("\nTipo de negócio viável na loja: ");
         s.append(tipoNegocio);
-        s.append("Nº de porta:");
+        s.append("\nNº de porta:");
         s.append(porta);
         return s.toString();
     }

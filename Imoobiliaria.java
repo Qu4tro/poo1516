@@ -1,7 +1,4 @@
 
-
-import sun.reflect.generics.tree.Tree;
-
 import java.io.*;
 import java.util.*;
 import java.lang.String;
@@ -36,7 +33,7 @@ public class Imoobiliaria implements Serializable {
             System.exit(1);
         }
         return new Imoobiliaria();
-        //LOAD //SAVE TODO
+        //LOAD //SAVE
     }
 
     public void save(String file) throws IOException {
@@ -48,8 +45,8 @@ public class Imoobiliaria implements Serializable {
     }
 
     public static Imoobiliaria load(String file) throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
 
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
         Imoobiliaria imob = (Imoobiliaria) ois.readObject();
 
         ois.close();
@@ -57,6 +54,12 @@ public class Imoobiliaria implements Serializable {
     }
 
     public static void initial_menu(Imoobiliaria imobiliaria) {
+
+        if (imobiliaria.loggedAsBuyer()) {
+            buyerMenu(imobiliaria);
+        } else if (imobiliaria.loggedAsSeller()) {
+            sellerMenu(imobiliaria);
+        }
 
         Menu m = new Menu();
         List<String> params;
@@ -76,6 +79,7 @@ public class Imoobiliaria implements Serializable {
                 params = loginUI();
                 try {
                     imobiliaria.iniciaSessao(params.get(0), params.get(1));
+
                 } catch (SemAutorizacaoException e) {
                     Menu.messageUser("Login incorrecto!");
                     initial_menu(imobiliaria);
@@ -94,11 +98,14 @@ public class Imoobiliaria implements Serializable {
                     if (params == null) {
                         return;
                     }
+                    //Menu.messageUser(params.get(0));
+
                     if (params.get(0).equals("comprador")) {
                         user = new Comprador(params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), null);
                     } else if (params.get(0).equals("vendedor")) {
-                        user = new Vendedor(params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), null);
+                        user = new Vendedor(params.get(1), params.get(2), params.get(3), params.get(4), params.get(5));
                     }
+                    //Menu.messageUser(user.);
                     imobiliaria.registarUtilizador(user);
                 } catch (UtilizadorExistenteException e) {
                     Menu.messageUser("Utilizador já existente!");
@@ -120,6 +127,14 @@ public class Imoobiliaria implements Serializable {
                 break;
 
         }
+
+        try {
+            imobiliaria.save("ficheiro.app");
+        } catch (IOException e) {
+            System.out.println("Couldn't save file.");
+        }
+
+
     }
 
 
@@ -212,6 +227,7 @@ public class Imoobiliaria implements Serializable {
         m.addField("Consultar imóveis");
         m.addField("Consultar imóveis habitáveis");
         m.addField("Consultar imóveis favoritos");
+        m.addField("Adicionar favoritos");
         m.addField("Contactos");
         m.addField("Logout");
 
@@ -228,6 +244,8 @@ public class Imoobiliaria implements Serializable {
                 favoritosUI(imobiliaria);
                 break;
             case 4:
+                addFavoritoUI(imobiliaria);
+            case 5:
                 contactosUI(imobiliaria);
                 break;
             case 0:
@@ -316,14 +334,14 @@ public class Imoobiliaria implements Serializable {
         imoveis.stream().forEach(i -> n.addField(i.shortLine()));
         n.addField("Sair");
 
-        choice = m.presentChoices(15);
+        choice = n.presentChoices(15);
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            imovelUI(imoveis.get(choice));
+            imovelUI(imoveis.get(choice - 1));
         }
 
-
+        initial_menu(imobiliaria);
 
     }
 
@@ -341,14 +359,14 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            Imovel im = entries.stream().map(i -> i.getKey()).collect(Collectors.toList()).get(choice);
+            Imovel im = entries.stream().map(i -> i.getKey()).collect(Collectors.toList()).get(choice - 1);
             imovelUI(im);
         }
     }
 
     public static void habitaveisUI(Imoobiliaria imobiliaria) {
         Menu m = new Menu();
-        m.addField("Price");
+        m.addField("Preço máximo");
         int price = Integer.parseInt(m.getParams().get(0));
         List<Habitavel> habitaveis = imobiliaria.getHabitaveis(price);
 
@@ -360,7 +378,7 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            imovelUI((Imovel) habitaveis.get(choice));
+            imovelUI((Imovel) habitaveis.get(choice - 1));
         }
     }
 
@@ -379,13 +397,60 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            Imovel im = favs.stream().collect(Collectors.toList()).get(choice);
+            Imovel im = favs.stream().collect(Collectors.toList()).get(choice - 1);
             imovelUI(im);
         }
 
     }
 
+    public static void addFavoritoUI(Imoobiliaria imobiliaria) {
+
+        int choice;
+        Scanner scanner = new Scanner(System.in);
+        Menu m = new Menu();
+        Menu n = new Menu();
+        String tipos[] = {"Apartamento", "Loja", "Moradia", "Terreno"};
+        String tipo;
+
+        m.addField("Apartamento");
+        m.addField("Loja");
+        m.addField("Moradia");
+        m.addField("Terreno");
+        m.addField("Voltar");
+
+        choice = m.presentChoices();
+        if (choice == 0) {
+            initial_menu(imobiliaria);
+            return;
+        } else {
+            tipo = tipos[choice - 1];
+        }
+
+        System.out.println("Preço máximo: ");
+        int precoMaximo = scanner.nextInt();
+
+        List<Imovel> imoveis = imobiliaria.getImovel(tipo, precoMaximo);
+
+        imoveis.stream().forEach(i -> n.addField(i.shortLine()));
+        n.addField("Sair");
+
+        choice = n.presentChoices(15);
+        if (choice != 0) {
+            String id = imoveis.get(choice - 1).getId();
+            try {
+                imobiliaria.setFavorito(id);
+            } catch (ImovelInexistenteException e) {
+                Menu.messageUser("Imóvel não existe.");
+            } catch (SemAutorizacaoException e) {
+                Menu.messageUser("Tem que ser comprador para poder adicionar um favorito.");
+            }
+        }
+
+        initial_menu(imobiliaria);
+    }
+
     public static void aVendaUI(Imoobiliaria imobiliaria) {
+
         List<Consulta> consultas;
         try {
             consultas = imobiliaria.getConsultas();
@@ -420,7 +485,7 @@ public class Imoobiliaria implements Serializable {
         if (choice == 0) {
             initial_menu(imobiliaria);
         } else {
-            Imovel im = imobiliaria.imoveis.get(topImoveis.stream().collect(Collectors.toList()).get(choice));
+            Imovel im = imobiliaria.imoveis.get(topImoveis.stream().collect(Collectors.toList()).get(choice - 1));
             imovelUI(im);
         }
 
@@ -502,19 +567,20 @@ public class Imoobiliaria implements Serializable {
                 imovel = paramsToTerreno(params, v);
                 break;
             case 0:
-                sellerMenu(imobiliaria);
+                initial_menu(imobiliaria);
                 break;
         }
 
         if (imovel == null) {
             Menu.messageUser("Imóvel não foi inserido com sucesso!");
-            sellerMenu(imobiliaria);
+            initial_menu(imobiliaria);
             return;
         }
 
         try {
             imobiliaria.registaImovel(imovel);
             Menu.messageUser("Imóvel foi inserido com sucesso!");
+            initial_menu(imobiliaria);
         } catch (ImovelExisteException e) {
             Menu.messageUser("Imóvel já existe!");
         } catch (SemAutorizacaoException e) {
@@ -524,69 +590,73 @@ public class Imoobiliaria implements Serializable {
     }
 
     public static Apartamento paramsToApartamento(List<String> params, Vendedor vendedor) {
-        EstadoImovel estado = string2Estado(params.get(3));
-        double precoP = Double.parseDouble(params.get(4));
-        double precoM = Double.parseDouble(params.get(5));
-        double area = Double.parseDouble(params.get(7));
-        int quartos = Integer.parseInt(params.get(8));
-        int wc = Integer.parseInt(params.get(9));
-        int porta = Integer.parseInt(params.get(10));
-        int andar = Integer.parseInt(params.get(11));
-        boolean garagem = params.get(12).equals("sim");
+        EstadoImovel estado = string2Estado(params.get(2));
+        double precoP = Double.parseDouble(params.get(3));
+        double precoM = Double.parseDouble(params.get(4));
+        String tipo = params.get(5);
+        double area = Double.parseDouble(params.get(6));
+        int quartos = Integer.parseInt(params.get(7));
+        int wc = Integer.parseInt(params.get(8));
+        int porta = Integer.parseInt(params.get(9));
+        int andar = Integer.parseInt(params.get(10));
+        boolean garagem = params.get(11).equals("sim");
 
-        return new Apartamento(params.get(0), params.get(1), estado, precoP, precoM, vendedor, params.get(6),
+        return new Apartamento(params.get(0), params.get(1), estado, precoP, precoM, vendedor, tipo,
                 area, quartos, wc, porta, andar, garagem);
     }
 
     public static Loja paramsToLoja(List<String> params, Vendedor vendedor) {
-        EstadoImovel estado = string2Estado(params.get(3));
-        double precoP = Double.parseDouble(params.get(4));
-        double precoM = Double.parseDouble(params.get(5));
-        double area = Double.parseDouble(params.get(7));
+        EstadoImovel estado = string2Estado(params.get(2));
+        double precoP = Double.parseDouble(params.get(3));
+        double precoM = Double.parseDouble(params.get(4));
+        String tipo = params.get(5);
+        double area = Double.parseDouble(params.get(6));
         boolean wc = params.get(8).equals("sim");
         int porta = Integer.parseInt(params.get(9));
 
-        return new Loja(params.get(0), params.get(1), estado, precoP, precoM, vendedor, area, wc, params.get(6), porta);
+        return new Loja(params.get(0), params.get(1), estado, precoP, precoM, vendedor, area, wc, tipo, porta);
     }
 
     public static LojaHabitavel paramsToLojaHabitavel(List<String> params, Vendedor vendedor) {
-        EstadoImovel estado = string2Estado(params.get(3));
-        double precoP = Double.parseDouble(params.get(4));
-        double precoM = Double.parseDouble(params.get(5));
-        double area = Double.parseDouble(params.get(7));
-        int quartos = Integer.parseInt(params.get(8));
-        boolean wc = params.get(9).equals("sim");
-        int porta = Integer.parseInt(params.get(10));
-        int andar = Integer.parseInt(params.get(11));
-        boolean garagem = params.get(12).equals("sim");
+        EstadoImovel estado = string2Estado(params.get(2));
+        double precoP = Double.parseDouble(params.get(3));
+        double precoM = Double.parseDouble(params.get(4));
+        String tipo = params.get(5);
+        double area = Double.parseDouble(params.get(6));
+        int quartos = Integer.parseInt(params.get(7));
+        boolean wc = params.get(8).equals("sim");
+        int porta = Integer.parseInt(params.get(9));
+        int andar = Integer.parseInt(params.get(10));
+        boolean garagem = params.get(11).equals("sim");
 
         return new LojaHabitavel(params.get(0), params.get(1), estado, precoP, precoM, vendedor, area,
-                wc, params.get(6), porta, quartos, andar, garagem);
+                wc, tipo, porta, quartos, andar, garagem);
     }
 
     public static Moradia paramsToMoradia(List<String> params, Vendedor vendedor) {
-        EstadoImovel estado = string2Estado(params.get(3));
-        double precoP = Double.parseDouble(params.get(4));
-        double precoM = Double.parseDouble(params.get(5));
-        double areaI = Double.parseDouble(params.get(7));
-        double areaT = Double.parseDouble(params.get(8));
-        double areaTerr = Double.parseDouble(params.get(9));
-        int quartos = Integer.parseInt(params.get(10));
-        int wc = Integer.parseInt(params.get(11));
-        int porta = Integer.parseInt(params.get(12));
+        EstadoImovel estado = string2Estado(params.get(2));
+        double precoP = Double.parseDouble(params.get(3));
+        double precoM = Double.parseDouble(params.get(4));
+        String tipo = params.get(5);
+        double areaI = Double.parseDouble(params.get(6));
+        double areaT = Double.parseDouble(params.get(7));
+        double areaTerr = Double.parseDouble(params.get(8));
+        int quartos = Integer.parseInt(params.get(9));
+        int wc = Integer.parseInt(params.get(10));
+        int porta = Integer.parseInt(params.get(11));
 
-        return new Moradia(params.get(0), params.get(1), estado, precoP, precoM, vendedor, params.get(6),
+        return new Moradia(params.get(0), params.get(1), estado, precoP, precoM, vendedor, tipo,
                 areaI, areaT, areaTerr, quartos, wc, porta);
     }
 
     public static Terreno paramsToTerreno(List<String> params, Vendedor vendedor) {
-        EstadoImovel estado = string2Estado(params.get(3));
-        double precoP = Double.parseDouble(params.get(4));
-        double precoM = Double.parseDouble(params.get(5));
-        double area = Double.parseDouble(params.get(6));
-        double dim = Double.parseDouble(params.get(7));
-        double kwh = Double.parseDouble(params.get(8));
-        boolean acesso = params.get(12).equals("sim");
+        EstadoImovel estado = string2Estado(params.get(2));
+        double precoP = Double.parseDouble(params.get(3));
+        double precoM = Double.parseDouble(params.get(4));
+        double area = Double.parseDouble(params.get(5));
+        double dim = Double.parseDouble(params.get(6));
+        double kwh = Double.parseDouble(params.get(7));
+        boolean acesso = params.get(8).equals("sim");
 
         return new Terreno(params.get(0), params.get(1), estado, precoP, precoM, vendedor,
                 area, dim, kwh, acesso);
@@ -619,14 +689,13 @@ public class Imoobiliaria implements Serializable {
             } catch (EstadoInvalidoException e) {
                 Menu.messageUser("Estado não é válido!");
             }
-
-        } else {
-            initial_menu(imobiliaria);
         }
 
+        initial_menu(imobiliaria);
     }
 
     public static void imovelUI(Imovel im) {
+        Menu.clearScreen();
         System.out.println(im);
         Menu.messageUser("");
     }
@@ -642,7 +711,12 @@ public class Imoobiliaria implements Serializable {
     }
 
     public void consultar(Imovel i) {
-        Consulta c = new Consulta(new GregorianCalendar(), loggedUser.getEmail());
+        Consulta c;
+        if (loggedUser != null) {
+            c = new Consulta(new GregorianCalendar(), loggedUser.getEmail());
+        } else {
+            c = new Consulta(new GregorianCalendar(), "");
+        }
         consultas.add(c);
         i.getVendedor().consult(i.getId());
     }
@@ -680,7 +754,7 @@ public class Imoobiliaria implements Serializable {
     public void registarUtilizador(Utilizador user) throws UtilizadorExistenteException {
 
         if (user != null && !(users.containsKey(user.getEmail()))) {
-            users.put(user.getEmail(), user.clone());
+            users.put(user.getEmail(), user);
 
         } else {
             throw new UtilizadorExistenteException("Este utilizador já existe");
@@ -765,6 +839,7 @@ public class Imoobiliaria implements Serializable {
     }
 
     public List<Imovel> getImovel(String classe, int preco) {
+
         List<Imovel> ims = imoveis.values()
                 .stream()
                 .filter(i -> mesmoTipoImovel(classe, i))
@@ -879,7 +954,7 @@ public class Imoobiliaria implements Serializable {
 
     public boolean loggedAsBuyer() {
         if (loggedUser != null) {
-            return (loggedUser instanceof Vendedor);
+            return (loggedUser instanceof Comprador);
         }
 
         return false;
@@ -887,7 +962,7 @@ public class Imoobiliaria implements Serializable {
 
     public boolean loggedAsSeller() {
         if (loggedUser != null) {
-            return (loggedUser instanceof Comprador);
+            return (loggedUser instanceof Vendedor);
         }
 
         return false;

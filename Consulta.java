@@ -58,7 +58,7 @@ public class Consulta
     
     public String toString(){
         StringBuilder s = new StringBuilder();
-        s.append("Data: " + data);
+        s.append("Data: " + data.toString());
         s.append("\t");
         s.append("Email: " + email);
         return s.toString();

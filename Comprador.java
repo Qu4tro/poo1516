@@ -33,12 +33,11 @@ public class Comprador extends Utilizador {
     }
 
     public ArrayList<String> getFavoritos() {
-        return (ArrayList<String>) favoritos.clone();
+        return new ArrayList<>(favoritos);
     }
 
     public void setFavoritos(ArrayList<String> favoritos) {
-        // TODO: Verificar se idMovel existe, se n existe throw ImovelInexistente
-        this.favoritos = (ArrayList<String>) favoritos.clone();
+        this.favoritos = new ArrayList<>(favoritos);
     }
 
     public void addFav(String idImovel) {
@@ -72,7 +71,8 @@ public class Comprador extends Utilizador {
     
     public String toString(){
         StringBuilder s = new StringBuilder();
-        for (String imovel : favoritos) s.append(imovel + "\n");
+        for (String imovel : favoritos)
+            s.append(imovel + "\n");
         return s.toString();
     }
 

@@ -124,20 +124,22 @@ public class Moradia extends Imovel implements Habitavel {
         StringBuilder s;
         s = new StringBuilder();
 
+        s.append(super.toString());
         s.append("Tipo: ");
         s.append(tipo);
-        s.append("Área de Implementação: ");
+        s.append("\nÁrea de Implementação: ");
         s.append(areaImplementacao);
-        s.append("Área total coberta: ");
+        s.append("\nÁrea total coberta: ");
         s.append(areaTotal);
-        s.append("Área terreno envolvente: ");
+        s.append("\nÁrea terreno envolvente: ");
         s.append(areaTerreno);
-        s.append("Nº de quartos: ");
+        s.append("\nNº de quartos: ");
         s.append(quartos);
-        s.append("Nº de WCs: ");
+        s.append("\nNº de WCs: ");
         s.append(wc);
-        s.append("Nº da porta: ");
+        s.append("\nNº da porta: ");
         s.append(porta);
+
         return s.toString();
     }
 
